@@ -1,0 +1,1211 @@
+generator client {
+  provider        = "prisma-client-js"
+  // previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  //engineType = "binary"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                                                                             Int                          @id(map: "PK__Utilisat__09949E0ACD734A76") @default(autoincrement()) @map("IdentifiantUtilisateur")
+  Nom                                                                            String                       @db.NVarChar(100)
+  Prenom                                                                         String                       @db.NVarChar(100)
+  Email                                                                          String                       @unique(map: "UQ__Utilisat__A9D1053461132646") @db.NVarChar(255)
+  MotDePasse                                                                     String                       @db.NVarChar(255)
+  NumeroTelephone                                                                String?                      @db.NVarChar(20)
+  DateNaissance                                                                  DateTime?                    @db.Date
+  PhotoProfil                                                                    String?                      @db.NVarChar(500)
+  TypeUtilisateur                                                                String                       @db.NVarChar(20)
+  StatutCompte                                                                   String?                      @default("Actif", map: "DF__Utilisate__Statu__60C757A0") @db.NVarChar(20)
+  EmailVerifie                                                                   Boolean?                     @default(false, map: "DF__Utilisate__Email__62AFA012")
+  TelephoneVerifie                                                               Boolean?                     @default(false, map: "DF__Utilisate__Telep__63A3C44B")
+  DateInscription                                                                DateTime?                    @default(dbgenerated("sysdatetime()"), map: "DF__Utilisate__DateI__6497E884")
+  DerniereConnexion                                                              DateTime?
+  AdresseIP                                                                      String?                      @db.NVarChar(45)
+  DeviceInfo                                                                     String?                      @db.NVarChar(500)
+  LanguePreferee                                                                 String?                      @default("fr", map: "DF__Utilisate__Langu__658C0CBD") @db.NVarChar(10)
+  DevisePreferee                                                                 String?                      @default("XOF", map: "DF__Utilisate__Devis__668030F6") @db.NVarChar(3)
+  BiographieUtilisateur                                                          String?
+  SiteWeb                                                                        String?                      @db.NVarChar(255)
+  ReseauxSociaux                                                                 String?                      @db.NVarChar(Max)
+  NotesUtilisateur                                                               Decimal?                     @default(0.00, map: "DF__Utilisate__Notes__6774552F") @db.Decimal(3, 2)
+  NombreReservationsEffectuees                                                   Int?                         @default(0, map: "DF__Utilisate__Nombr__68687968")
+  NombreVehiculesLoues                                                           Int?                         @default(0, map: "DF__Utilisate__Nombr__695C9DA1")
+  MembreDepuis                                                                   Int?
+  NiveauFidelite                                                                 String?                      @default("BRONZE", map: "DF__Utilisate__Nivea__6A50C1DA") @db.NVarChar(20)
+  PointsFideliteTotal                                                            Int?                         @default(0, map: "DF__Utilisate__Point__6C390A4C")
+  A_B_Tests                                                                      A_B_Tests[]
+  adresses                                                                       AdresseUtilisateur[]
+  aggregations                                                                   AggregationUtilisateur?
+  avisAuteur                                                                     Avis[]                       @relation("ReviewAuthor")
+  CodesPromo                                                                     CodePromo[]
+  ConfigurationBusinessRules_ConfigurationBusinessRules_CreeParToUtilisateurs    ConfigurationBusinessRules[] @relation("ConfigurationBusinessRules_CreeParToUtilisateurs")
+  ConfigurationBusinessRules_ConfigurationBusinessRules_ModifieParToUtilisateurs ConfigurationBusinessRules[] @relation("ConfigurationBusinessRules_ModifieParToUtilisateurs")
+  Conversations_Conversations_IdentifiantUtilisateur1ToUtilisateurs              Conversations[]              @relation("Conversations_IdentifiantUtilisateur1ToUtilisateurs")
+  Conversations_Conversations_IdentifiantUtilisateur2ToUtilisateurs              Conversations[]              @relation("Conversations_IdentifiantUtilisateur2ToUtilisateurs")
+  documents                                                                      DocumentUtilisateur[]
+  DocumentsUtilisateurs_DocumentsUtilisateurs_VerifieParToUtilisateurs           DocumentUtilisateur[]        @relation("DocumentsUtilisateurs_VerifieParToUtilisateurs")
+  DonneesChiffrees                                                               DonneesChiffrees[]
+  Factures                                                                       Facture[]
+  favoris                                                                        Favori[]
+  Incidents                                                                      Incident[]
+  JournalAudit                                                                   JournalAudit[]
+  LogsErreurs                                                                    LogsErreurs[]
+  Messages_Messages_IdentifiantDestinataireToUtilisateurs                        Message[]                    @relation("Messages_IdentifiantDestinataireToUtilisateurs")
+  messages                                                                       Message[]                    @relation("SenderMessages")
+  MethodesPaiementUtilisateurs                                                   MethodePaiementUtilisateur[]
+  notifications                                                                  Notification[]
+  pointsFidelite                                                                 PointFidelite[]
+  preferences                                                                    PreferenceUtilisateur?
+  filleulages                                                                    ProgrammeParrainage[]        @relation("Referred")
+  parrainages                                                                    ProgrammeParrainage[]        @relation("Referrer")
+  recherchesSauvegardees                                                         RecherchesSauvegardee[]
+  Reclamations_Reclamations_AssigneAToUtilisateurs                               Reclamation[]                @relation("Reclamations_AssigneAToUtilisateurs")
+  reclamations                                                                   Reclamation[]                @relation("ComplaintUser")
+  reservationsAnnulees                                                           Reservation[]                @relation("CanceledBy")
+  reservationsLocataire                                                          Reservation[]                @relation("RenterBookings")
+  reservationsProprietaire                                                       Reservation[]                @relation("OwnerBookings")
+  SignalementsAvis_SignalementsAvis_IdentifiantSignaleurToUtilisateurs           SignalementsAvis[]           @relation("SignalementsAvis_IdentifiantSignaleurToUtilisateurs")
+  SignalementsAvis_SignalementsAvis_TraiteParToUtilisateurs                      SignalementsAvis[]           @relation("SignalementsAvis_TraiteParToUtilisateurs")
+  transactions                                                                   Transaction[]
+  UtilisationsCodesPromo                                                         UtilisationCodePromo[]
+  vehiculesProprietaire                                                          Vehicle[]                    @relation("VehicleOwner")
+
+  @@index([DateInscription], map: "IX_Utilisateurs_DateInscription")
+  @@index([Email], map: "IX_Utilisateurs_Email")
+  @@index([NiveauFidelite], map: "IX_Utilisateurs_NiveauFidelite")
+  @@index([StatutCompte], map: "IX_Utilisateurs_StatutCompte")
+  @@index([TypeUtilisateur], map: "IX_Utilisateurs_TypeUtilisateur")
+  @@map("Utilisateurs")
+}
+
+model AdresseUtilisateur {
+  id                   Int                       @id(map: "PK__Adresses__F8B1C87D0553ED44") @default(autoincrement()) @map("IdentifiantAdresse")
+  utilisateurId        Int                       @map("IdentifiantUtilisateur")
+  TypeAdresse          String                    @db.NVarChar(20)
+  AdresseLigne1        String                    @db.NVarChar(255)
+  AdresseLigne2        String?                   @db.NVarChar(255)
+  Ville                String                    @db.NVarChar(100)
+  Region               String?                   @db.NVarChar(100)
+  CodePostal           String?                   @db.NVarChar(20)
+  Pays                 String                    @default("Sénégal", map: "DF__AdressesUt__Pays__70099B30") @db.NVarChar(100)
+  Coordonnees          Unsupported("geography")?
+  Latitude             Decimal?                  @db.Decimal(10, 8)
+  Longitude            Decimal?                  @db.Decimal(11, 8)
+  EstAdressePrincipale Boolean?                  @default(false, map: "DF__AdressesU__EstAd__70FDBF69")
+  DateAjout            DateTime?                 @default(dbgenerated("sysdatetime()"), map: "DF__AdressesU__DateA__71F1E3A2")
+  utilisateur          User                      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_AdressesUtilisateurs_Utilisateur")
+
+  @@index([TypeAdresse], map: "IX_AdressesUtilisateurs_Type")
+  @@index([utilisateurId], map: "IX_AdressesUtilisateurs_Utilisateur")
+  @@map("AdressesUtilisateurs")
+}
+
+model DocumentUtilisateur {
+  id                                                          Int       @id(map: "PK__Document__38CFE10DE9A823E4") @default(autoincrement()) @map("IdentifiantDocument")
+  utilisateurId                                               Int       @map("IdentifiantUtilisateur")
+  TypeDocument                                                String    @db.NVarChar(50)
+  NomFichier                                                  String    @db.NVarChar(255)
+  CheminFichier                                               String    @db.NVarChar(500)
+  TailleFichier                                               BigInt?
+  FormatFichier                                               String?   @db.NVarChar(10)
+  NumeroDocument                                              String?   @db.NVarChar(100)
+  DateExpiration                                              DateTime? @db.Date
+  StatutVerification                                          String?   @default("EnAttente", map: "DF__Documents__Statu__77AABCF8") @db.NVarChar(20)
+  DateTeleversement                                           DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Documents__DateT__7993056A")
+  DateVerification                                            DateTime?
+  VerifiePar                                                  Int?
+  CommentairesVerification                                    String?   @db.NVarChar(500)
+  HashFichier                                                 Bytes?    @db.VarBinary(64)
+  utilisateur                                                 User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_DocumentsUtilisateurs_Utilisateur")
+  Utilisateurs_DocumentsUtilisateurs_VerifieParToUtilisateurs User?     @relation("DocumentsUtilisateurs_VerifieParToUtilisateurs", fields: [VerifiePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DocumentsUtilisateurs_Verificateur")
+
+  @@index([DateExpiration], map: "IX_DocumentsUtilisateurs_Expiration")
+  @@index([StatutVerification], map: "IX_DocumentsUtilisateurs_Statut")
+  @@index([TypeDocument], map: "IX_DocumentsUtilisateurs_Type")
+  @@index([utilisateurId], map: "IX_DocumentsUtilisateurs_Utilisateur")
+  @@map("DocumentsUtilisateurs")
+}
+
+model PreferenceUtilisateur {
+  id                        Int       @id(map: "PK__Preferen__32DC3CF312BFC28D") @default(autoincrement()) @map("IdentifiantPreference")
+  utilisateurId             Int       @unique(map: "UQ__Preferen__09949E0B443D7399") @map("IdentifiantUtilisateur")
+  NotificationsEmail        Boolean?  @default(true, map: "DF__Preferenc__Notif__7F4BDEC0")
+  NotificationsSMS          Boolean?  @default(true, map: "DF__Preferenc__Notif__004002F9")
+  NotificationsPush         Boolean?  @default(true, map: "DF__Preferenc__Notif__01342732")
+  NotificationsReservations Boolean?  @default(true, map: "DF__Preferenc__Notif__02284B6B")
+  NotificationsPromotions   Boolean?  @default(false, map: "DF__Preferenc__Notif__031C6FA4")
+  NotificationsMessages     Boolean?  @default(true, map: "DF__Preferenc__Notif__041093DD")
+  NotificationsAvis         Boolean?  @default(true, map: "DF__Preferenc__Notif__0504B816")
+  ModeTheme                 String?   @default("Clair", map: "DF__Preferenc__ModeT__05F8DC4F") @db.NVarChar(10)
+  AffichageMonnaie          String?   @default("XOF", map: "DF__Preferenc__Affic__07E124C1") @db.NVarChar(3)
+  FormatDate                String?   @default("DD/MM/YYYY", map: "DF__Preferenc__Forma__08D548FA") @db.NVarChar(20)
+  FuseauHoraire             String?   @default("Africa/Dakar", map: "DF__Preferenc__Fusea__09C96D33") @db.NVarChar(50)
+  VisibiliteProfile         String?   @default("Public", map: "DF__Preferenc__Visib__0ABD916C") @db.NVarChar(20)
+  AfficherNumeroTelephone   Boolean?  @default(false, map: "DF__Preferenc__Affic__0CA5D9DE")
+  AfficherEmail             Boolean?  @default(false, map: "DF__Preferenc__Affic__0D99FE17")
+  AutoriserMessages         Boolean?  @default(true, map: "DF__Preferenc__Autor__0E8E2250")
+  DateMiseAJour             DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Preferenc__DateM__0F824689")
+  utilisateur               User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_PreferencesUtilisateurs_Utilisateur")
+
+  @@map("PreferencesUtilisateurs")
+}
+
+model TentativeConnexion {
+  id            Int       @id(map: "PK__Tentativ__2A4B69DE3E8297C5") @default(autoincrement()) @map("IdentifiantTentative")
+  AdresseEmail  String    @db.NVarChar(150)
+  AdresseIP     String    @db.NVarChar(50)
+  Reussie       Boolean?  @default(false, map: "DF__Tentative__Reuss__1352D76D")
+  CodeErreur    String?   @db.NVarChar(50)
+  MotifEchec    String?   @db.NVarChar(255)
+  DateTentative DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Tentative__DateT__1446FBA6")
+  UserAgent     String?   @db.NVarChar(500)
+  Pays          String?   @db.NVarChar(100)
+
+  @@index([AdresseEmail, DateTentative], map: "IDX_Tentatives_Email_Date")
+  @@index([AdresseIP, DateTentative], map: "IDX_Tentatives_IP_Date")
+  @@index([Reussie], map: "IDX_Tentatives_Reussie")
+  @@map("TentativesConnexion")
+}
+
+model CategorieVehicule {
+  id                   Int       @id(map: "PK__Categori__AF28A876F87C4D44") @default(autoincrement()) @map("IdentifiantCategorie")
+  NomCategorie         String    @unique(map: "UQ__Categori__9A363C718DD65B2C") @db.NVarChar(100)
+  DescriptionCategorie String?   @db.NVarChar(500)
+  IconeCategorie       String?   @db.NVarChar(255)
+  OrdreAffichage       Int?      @default(0, map: "DF__Categorie__Ordre__1CDC41A7")
+  EstActif             Boolean?  @default(true, map: "DF__Categorie__EstAc__1DD065E0")
+  DateCreation         DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Categorie__DateC__1EC48A19")
+  vehicules            Vehicle[]
+
+  @@map("CategoriesVehicules")
+}
+
+model MarqueVehicule {
+  id           Int              @id(map: "PK__MarquesV__DE7A25BE2B14DAB4") @default(autoincrement()) @map("IdentifiantMarque")
+  NomMarque    String           @unique(map: "UQ__MarquesV__B430BC379A4C5934") @db.NVarChar(100)
+  LogoMarque   String?          @db.NVarChar(255)
+  PaysOrigine  String?          @db.NVarChar(100)
+  SiteWeb      String?          @db.NVarChar(255)
+  EstPopulaire Boolean?         @default(false, map: "DF__MarquesVe__EstPo__22951AFD")
+  DateAjout    DateTime?        @default(dbgenerated("sysdatetime()"), map: "DF__MarquesVe__DateA__23893F36")
+  modeles      ModeleVehicule[]
+
+  @@index([EstPopulaire], map: "IX_MarquesVehicules_Populaire")
+  @@map("MarquesVehicules")
+}
+
+model ModeleVehicule {
+  id                  Int            @id(map: "PK__ModelesV__6F390477CD7555DA") @default(autoincrement()) @map("IdentifiantModele")
+  marqueId            Int            @map("IdentifiantMarque")
+  NomModele           String         @db.NVarChar(100)
+  AnneeDebut          Int?
+  AnneeFin            Int?
+  TypeCarburant       String?        @db.NVarChar(50)
+  TypeTransmission    String?        @db.NVarChar(50)
+  NombrePlaces        Int?
+  NombrePortes        Int?
+  CapaciteCoffre      Int?
+  ConsommationMoyenne Decimal?       @db.Decimal(5, 2)
+  ImageModele         String?        @db.NVarChar(255)
+  DateAjout           DateTime?      @default(dbgenerated("sysdatetime()"), map: "DF__ModelesVe__DateA__284DF453")
+  marque              MarqueVehicule @relation(fields: [marqueId], references: [id], onUpdate: NoAction, map: "FK_ModelesVehicules_Marque")
+  vehicules           Vehicle[]
+
+  @@index([TypeCarburant], map: "IX_ModelesVehicules_Carburant")
+  @@index([marqueId], map: "IX_ModelesVehicules_Marque")
+  @@map("ModelesVehicules")
+}
+
+model Vehicle {
+  id                             Int                          @id(map: "PK__Vehicule__C32242C5F9A65B99") @default(autoincrement()) @map("IdentifiantVehicule")
+  proprietaireId                 Int                          @map("IdentifiantProprietaire")
+  categorieId                    Int                          @map("IdentifiantCategorie")
+  modeleId                       Int                          @map("IdentifiantModele")
+  TitreAnnonce                   String                       @db.NVarChar(200)
+  DescriptionVehicule            String?                      @db.NVarChar(Max)
+  Immatriculation                String?                      @unique(map: "UQ__Vehicule__E15BDED2B14D9475") @db.NVarChar(50)
+  Annee                          Int
+  Couleur                        String?                      @db.NVarChar(50)
+  Kilometrage                    Int?                         @default(0, map: "DF__Vehicules__Kilom__2EFAF1E2")
+  NumeroChassisVIN               String?                      @unique(map: "UQ__Vehicule__4C400D34F6F56EA2") @db.NVarChar(50)
+  NombrePlaces                   Int
+  TypeCarburant                  String                       @db.NVarChar(50)
+  TypeTransmission               String                       @db.NVarChar(50)
+  Climatisation                  Boolean?                     @default(false, map: "DF__Vehicules__Clima__2FEF161B")
+  GPS                            Boolean?                     @default(false, map: "DF__Vehicules__GPS__30E33A54")
+  Bluetooth                      Boolean?                     @default(false, map: "DF__Vehicules__Bluet__31D75E8D")
+  CameraRecul                    Boolean?                     @default(false, map: "DF__Vehicules__Camer__32CB82C6")
+  SiegesEnCuir                   Boolean?                     @default(false, map: "DF__Vehicules__Siege__33BFA6FF")
+  ToitOuvrant                    Boolean?                     @default(false, map: "DF__Vehicules__ToitO__34B3CB38")
+  RegulateursVitesse             Boolean?                     @default(false, map: "DF__Vehicules__Regul__35A7EF71")
+  AirbagsMultiples               Boolean?                     @default(false, map: "DF__Vehicules__Airba__369C13AA")
+  EquipementsSupplementaires     String?                      @db.NVarChar(Max)
+  PrixJournalier                 Decimal                      @db.Decimal(10, 2)
+  PrixHebdomadaire               Decimal?                     @db.Decimal(10, 2)
+  PrixMensuel                    Decimal?                     @db.Decimal(10, 2)
+  CautionRequise                 Decimal?                     @default(0, map: "DF__Vehicules__Cauti__38845C1C") @db.Decimal(10, 2)
+  KilometrageInclus              Int?                         @default(200, map: "DF__Vehicules__Kilom__39788055")
+  FraisKilometrageSupplementaire Decimal?                     @default(0, map: "DF__Vehicules__Frais__3A6CA48E") @db.Decimal(10, 2)
+  LocalisationVille              String                       @db.NVarChar(100)
+  LocalisationRegion             String?                      @db.NVarChar(100)
+  AdresseComplete                String?                      @db.NVarChar(500)
+  Coordonnees                    Unsupported("geography")?
+  Latitude                       Decimal?                     @db.Decimal(10, 8)
+  Longitude                      Decimal?                     @db.Decimal(11, 8)
+  DisponibiliteLundi             Boolean?                     @default(true, map: "DF__Vehicules__Dispo__3B60C8C7")
+  DisponibiliteMardi             Boolean?                     @default(true, map: "DF__Vehicules__Dispo__3C54ED00")
+  DisponibiliteMercredi          Boolean?                     @default(true, map: "DF__Vehicules__Dispo__3D491139")
+  DisponibiliteJeudi             Boolean?                     @default(true, map: "DF__Vehicules__Dispo__3E3D3572")
+  DisponibiliteVendredi          Boolean?                     @default(true, map: "DF__Vehicules__Dispo__3F3159AB")
+  DisponibiliteSamedi            Boolean?                     @default(true, map: "DF__Vehicules__Dispo__40257DE4")
+  DisponibiliteDimanche          Boolean?                     @default(true, map: "DF__Vehicules__Dispo__4119A21D")
+  HeureDebutDisponibilite        DateTime?                    @default(dbgenerated("08:00"), map: "DF__Vehicules__Heure__420DC656") @db.Time
+  HeureFinDisponibilite          DateTime?                    @default(dbgenerated("20:00"), map: "DF__Vehicules__Heure__4301EA8F") @db.Time
+  LivraisonPossible              Boolean?                     @default(false, map: "DF__Vehicules__Livra__43F60EC8")
+  FraisLivraison                 Decimal?                     @default(0, map: "DF__Vehicules__Frais__44EA3301") @db.Decimal(10, 2)
+  RayonLivraison                 Int?
+  StatutVehicule                 String?                      @default("Actif", map: "DF__Vehicules__Statu__45DE573A") @db.NVarChar(20)
+  StatutVerification             String?                      @default("EnAttente", map: "DF__Vehicules__Statu__47C69FAC") @db.NVarChar(20)
+  NotesVehicule                  Decimal?                     @default(0.00, map: "DF__Vehicules__Notes__49AEE81E") @db.Decimal(3, 2)
+  NombreReservations             Int?                         @default(0, map: "DF__Vehicules__Nombr__4AA30C57")
+  NombreVues                     Int?                         @default(0, map: "DF__Vehicules__Nombr__4B973090")
+  DateCreation                   DateTime?                    @default(dbgenerated("sysdatetime()"), map: "DF__Vehicules__DateC__4C8B54C9")
+  DateDerniereModification       DateTime?                    @default(dbgenerated("sysdatetime()"), map: "DF__Vehicules__DateD__4D7F7902")
+  DateDerniereReservation        DateTime?
+  EstPromotion                   Boolean?                     @default(false, map: "DF__Vehicules__EstPr__4E739D3B")
+  EstVedette                     Boolean?                     @default(false, map: "DF__Vehicules__EstVe__4F67C174")
+  EstAssure                      Boolean?                     @default(false, map: "DF__Vehicules__EstAs__505BE5AD")
+  CompagnieAssurance             String?                      @db.NVarChar(200)
+  NumeroPoliceAssurance          String?                      @db.NVarChar(100)
+  DateExpirationAssurance        DateTime?                    @db.Date
+  DernierEntretien               DateTime?                    @db.Date
+  ProchainEntretien              DateTime?                    @db.Date
+  TarificationDynamiqueActive    Boolean?                     @default(false, map: "DF__Vehicules__Tarif__515009E6")
+  TauxOccupationActuel           Decimal?                     @default(0.00, map: "DF__Vehicules__TauxO__52442E1F") @db.Decimal(5, 2)
+  caracteristiquesTechniques     CaracteristiqueTechnique[]
+  Conversations                  Conversations[]
+  favoris                        Favori[]
+  historiquePrix                 HistoriquePrixVehicule[]
+  incidents                      Incident[]
+  photos                         PhotoVehicule[]
+  reglesTarification             RegleTarificationDynamique[]
+  reservations                   Reservation[]
+  categorie                      CategorieVehicule            @relation(fields: [categorieId], references: [id], onUpdate: NoAction, map: "FK_Vehicules_Categorie")
+  modele                         ModeleVehicule               @relation(fields: [modeleId], references: [id], onUpdate: NoAction, map: "FK_Vehicules_Modele")
+  proprietaire                   User                         @relation("VehicleOwner", fields: [proprietaireId], references: [id], onUpdate: NoAction, map: "FK_Vehicules_Proprietaire")
+
+  @@index([categorieId], map: "IX_Vehicules_Categorie")
+  @@index([DateCreation], map: "IX_Vehicules_DateCreation")
+  @@index([Latitude, Longitude], map: "IX_Vehicules_Location")
+  @@index([modeleId], map: "IX_Vehicules_Modele")
+  @@index([NotesVehicule], map: "IX_Vehicules_Notes")
+  @@index([PrixJournalier], map: "IX_Vehicules_Prix")
+  @@index([EstPromotion], map: "IX_Vehicules_Promotion")
+  @@index([proprietaireId], map: "IX_Vehicules_Proprietaire")
+  @@index([StatutVehicule], map: "IX_Vehicules_Statut")
+  @@index([EstVedette], map: "IX_Vehicules_Vedette")
+  @@index([LocalisationVille], map: "IX_Vehicules_Ville")
+  // Composite indexes for search/list performance
+  @@index([StatutVehicule, EstVedette, NotesVehicule], map: "IX_Vehicules_Search_Composite")
+  @@index([TypeCarburant], map: "IX_Vehicules_TypeCarburant")
+  @@index([TypeTransmission], map: "IX_Vehicules_TypeTransmission")
+  @@index([NombrePlaces], map: "IX_Vehicules_NombrePlaces")
+  @@index([proprietaireId, StatutVehicule], map: "IX_Vehicules_Owner_Statut")
+  @@map("Vehicules")
+}
+
+model PhotoVehicule {
+  id                 Int       @id(map: "PK__PhotosVe__91C43C1A32928D07") @default(autoincrement()) @map("IdentifiantPhoto")
+  vehiculeId         Int       @map("IdentifiantVehicule")
+  URLPhoto           String    @db.NVarChar(500)
+  URLMiniature       String?   @db.NVarChar(500)
+  LegendePhoto       String?   @db.NVarChar(255)
+  OrdreAffichage     Int?      @default(0, map: "DF__PhotosVeh__Ordre__58F12BAE")
+  EstPhotoPrincipale Boolean?  @default(false, map: "DF__PhotosVeh__EstPh__59E54FE7")
+  TailleFichier      BigInt?
+  FormatImage        String?   @db.NVarChar(10)
+  DateAjout          DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__PhotosVeh__DateA__5AD97420")
+  vehicule           Vehicle   @relation(fields: [vehiculeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_PhotosVehicules_Vehicule")
+
+  @@index([EstPhotoPrincipale], map: "IX_PhotosVehicules_Principale")
+  @@index([vehiculeId], map: "IX_PhotosVehicules_Vehicule")
+  @@map("PhotosVehicules")
+}
+
+model CaracteristiqueTechnique {
+  id                 Int       @id(map: "PK__Caracter__1F0584E35D747070") @default(autoincrement()) @map("IdentifiantCaracteristique")
+  vehiculeId         Int       @map("IdentifiantVehicule")
+  Puissance          Int?
+  Couple             Int?
+  VitesseMaximale    Int?
+  Acceleration       Decimal?  @db.Decimal(4, 2)
+  CapaciteReservoir  Int?
+  PoidsVide          Int?
+  ChargeUtile        Int?
+  LongueurVehicule   Int?
+  LargeurVehicule    Int?
+  HauteurVehicule    Int?
+  EmpatementVehicule Int?
+  NormeEmission      String?   @db.NVarChar(50)
+  TypeRoueMotrice    String?   @db.NVarChar(50)
+  DateAjout          DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Caracteri__DateA__5EAA0504")
+  vehicule           Vehicle   @relation(fields: [vehiculeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_CaracteristiquesTechniques_Vehicule")
+
+  @@map("CaracteristiquesTechniques")
+}
+
+model Reservation {
+  id                               Int                    @id(map: "PK__Reservat__8DDAB069B0613B2C") @default(autoincrement()) @map("IdentifiantReservation")
+  NumeroReservation                String                 @unique(map: "UQ__Reservat__751CE0890327C114") @default("", map: "DF__Reservati__Numer__795DFB40") @db.NVarChar(50)
+  vehiculeId                       Int                    @map("IdentifiantVehicule")
+  locataireId                      Int                    @map("IdentifiantLocataire")
+  proprietaireId                   Int                    @map("IdentifiantProprietaire")
+  DateDebut                        DateTime
+  DateFin                          DateTime
+  DateCreationReservation          DateTime?              @default(dbgenerated("sysdatetime()"), map: "DF__Reservati__DateC__7A521F79")
+  HeureDebut                       DateTime?              @db.Time
+  HeureFin                         DateTime?              @db.Time
+  LieuPriseEnCharge                String?                @db.NVarChar(500)
+  LieuRestitution                  String?                @db.NVarChar(500)
+  LivraisonDemandee                Boolean?               @default(false, map: "DF__Reservati__Livra__7B4643B2")
+  AdresseLivraison                 String?                @db.NVarChar(500)
+  FraisLivraison                   Decimal?               @default(0, map: "DF__Reservati__Frais__7C3A67EB") @db.Decimal(10, 2)
+  NombreJours                      Int?
+  PrixJournalier                   Decimal                @db.Decimal(10, 2)
+  MontantLocation                  Decimal                @db.Decimal(10, 2)
+  MontantCaution                   Decimal?               @default(0, map: "DF__Reservati__Monta__7D2E8C24") @db.Decimal(10, 2)
+  FraisService                     Decimal?               @default(0, map: "DF__Reservati__Frais__7E22B05D") @db.Decimal(10, 2)
+  FraisAssurance                   Decimal?               @default(0, map: "DF__Reservati__Frais__7F16D496") @db.Decimal(10, 2)
+  FraisSupplementaires             Decimal?               @default(0, map: "DF__Reservati__Frais__000AF8CF") @db.Decimal(10, 2)
+  DetailsSupplementaires           String?                @db.NVarChar(Max)
+  Remise                           Decimal?               @default(0, map: "DF__Reservati__Remis__00FF1D08") @db.Decimal(10, 2)
+  CodePromo                        String?                @db.NVarChar(50)
+  MontantTotal                     Decimal                @db.Decimal(10, 2)
+  StatutReservation                String?                @default("EnAttente", map: "DF__Reservati__Statu__01F34141") @db.NVarChar(30)
+  StatutPaiement                   String?                @default("EnAttente", map: "DF__Reservati__Statu__03DB89B3") @db.NVarChar(30)
+  MethodePaiement                  String?                @db.NVarChar(50)
+  KilometrageDepart                Int?
+  KilometrageRetour                Int?
+  KilometrageParcouru              Int?
+  KilometrageInclus                Int?                   @default(200, map: "DF__Reservati__Kilom__05C3D225")
+  FraisKilometrageSupplementaire   Decimal?               @default(0, map: "DF__Reservati__Frais__06B7F65E") @db.Decimal(10, 2)
+  MontantKilometrageSupplementaire Decimal?               @db.Decimal(21, 2)
+  NiveauCarburantDepart            String?                @db.NVarChar(20)
+  NiveauCarburantRetour            String?                @db.NVarChar(20)
+  EtatVehiculeDepart               String?                @db.NVarChar(Max)
+  EtatVehiculeRetour               String?                @db.NVarChar(Max)
+  PhotosDepart                     String?                @db.NVarChar(Max)
+  PhotosRetour                     String?                @db.NVarChar(Max)
+  CommentairesLocataire            String?
+  CommentairesProprietaire         String?
+  MotifAnnulation                  String?                @db.NVarChar(500)
+  DateAnnulation                   DateTime?
+  annuleParId                      Int?                   @map("AnnulePar")
+  FraisAnnulation                  Decimal?               @default(0, map: "DF__Reservati__Frais__09946309") @db.Decimal(10, 2)
+  EstAssurance                     Boolean?               @default(false, map: "DF__Reservati__EstAs__0A888742")
+  TypeAssurance                    String?                @db.NVarChar(100)
+  MontantAssurance                 Decimal?               @default(0, map: "DF__Reservati__Monta__0B7CAB7B") @db.Decimal(10, 2)
+  ConducteursSupplementaires       String?                @db.NVarChar(Max)
+  NombreConducteurs                Int?                   @default(1, map: "DF__Reservati__Nombr__0C70CFB4")
+  NotesSpeciales                   String?
+  DateConfirmation                 DateTime?
+  DateDebutEffectif                DateTime?
+  DateFinEffective                 DateTime?
+  RetardRetour                     Int?                   @default(0, map: "DF__Reservati__Retar__0D64F3ED")
+  FraisRetard                      Decimal?               @default(0, map: "DF__Reservati__Frais__0E591826") @db.Decimal(10, 2)
+  avis                             Avis?
+  Conversations                    Conversations[]
+  extensions                       ExtensionReservation[]
+  factures                         Facture[]
+  incidents                        Incident[]
+  reclamations                     Reclamation[]
+  annulePar                        User?                  @relation("CanceledBy", fields: [annuleParId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Reservations_AnnulePar")
+  locataire                        User                   @relation("RenterBookings", fields: [locataireId], references: [id], onUpdate: NoAction, map: "FK_Reservations_Locataire")
+  proprietaire                     User                   @relation("OwnerBookings", fields: [proprietaireId], references: [id], onUpdate: NoAction, map: "FK_Reservations_Proprietaire")
+  vehicule                         Vehicle                @relation(fields: [vehiculeId], references: [id], onUpdate: NoAction, map: "FK_Reservations_Vehicule")
+  transactions                     Transaction[]
+  UtilisationsCodesPromo           UtilisationCodePromo[]
+
+  @@index([DateCreationReservation], map: "IX_Reservations_DateCreation")
+  @@index([DateDebut, DateFin], map: "IX_Reservations_Dates")
+  @@index([locataireId], map: "IX_Reservations_Locataire")
+  @@index([StatutPaiement], map: "IX_Reservations_Paiement")
+  @@index([proprietaireId], map: "IX_Reservations_Proprietaire")
+  @@index([StatutReservation], map: "IX_Reservations_Statut")
+  @@index([vehiculeId], map: "IX_Reservations_Vehicule")
+  // Composite indexes for owner dashboard and availability checks
+  @@index([proprietaireId, DateDebut, DateFin], map: "IX_Reservations_Owner_Dates")
+  @@index([vehiculeId, StatutReservation, DateDebut, DateFin], map: "IX_Reservations_Availability")
+  @@map("Reservations")
+}
+
+model ExtensionReservation {
+  id                    Int         @id(map: "PK__Extensio__D5224C0C0F5B49C4") @default(autoincrement()) @map("IdentifiantExtension")
+  reservationId         Int         @map("IdentifiantReservation")
+  NouvelleDateFin       DateTime
+  AncienneDateFin       DateTime
+  JoursSupplementaires  Int?
+  MontantSupplementaire Decimal     @db.Decimal(10, 2)
+  StatutDemande         String?     @default("EnAttente", map: "DF__Extension__Statu__16EE5E27") @db.NVarChar(20)
+  DateDemande           DateTime?   @default(dbgenerated("sysdatetime()"), map: "DF__Extension__DateD__18D6A699")
+  DateReponse           DateTime?
+  RaisonExtension       String?     @db.NVarChar(500)
+  RaisonRefus           String?     @db.NVarChar(500)
+  reservation           Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ExtensionsReservations_Reservation")
+
+  @@index([reservationId], map: "IX_ExtensionsReservations_Reservation")
+  @@index([StatutDemande], map: "IX_ExtensionsReservations_Statut")
+  @@map("ExtensionsReservations")
+}
+
+model Transaction {
+  id                         Int          @id(map: "PK__Transact__2286EC89C39264A8") @default(autoincrement()) @map("IdentifiantTransaction")
+  NumeroTransaction          String       @unique(map: "UQ__Transact__89BA11D1A61635DF") @db.NVarChar(100)
+  reservationId              Int?         @map("IdentifiantReservation")
+  utilisateurId              Int          @map("IdentifiantUtilisateur")
+  TypeTransaction            String       @db.NVarChar(50)
+  Montant                    Decimal      @db.Decimal(10, 2)
+  Devise                     String?      @default("XOF", map: "DF__Transacti__Devis__1E8F7FEF") @db.NVarChar(3)
+  MethodePaiement            String       @db.NVarChar(50)
+  FournisseurPaiement        String?      @db.NVarChar(100)
+  ReferenceExterne           String?      @db.NVarChar(255)
+  StatutTransaction          String?      @default("EnAttente", map: "DF__Transacti__Statu__2077C861") @db.NVarChar(30)
+  DateTransaction            DateTime?    @default(dbgenerated("sysdatetime()"), map: "DF__Transacti__DateT__226010D3")
+  DateTraitement             DateTime?
+  FraisTransaction           Decimal?     @default(0, map: "DF__Transacti__Frais__2354350C") @db.Decimal(10, 2)
+  FraisCommission            Decimal?     @default(0, map: "DF__Transacti__Frais__24485945") @db.Decimal(10, 2)
+  MontantNet                 Decimal?     @db.Decimal(10, 2)
+  Description                String?      @db.NVarChar(500)
+  DetailsTransaction         String?      @db.NVarChar(Max)
+  AdresseIPTransaction       String?      @db.NVarChar(45)
+  DeviceInfo                 String?      @db.NVarChar(500)
+  CodeErreur                 String?      @db.NVarChar(50)
+  MessageErreur              String?      @db.NVarChar(500)
+  NombreTentatives           Int?         @default(1, map: "DF__Transacti__Nombr__253C7D7E")
+  EstRembourse               Boolean?     @default(false, map: "DF__Transacti__EstRe__2630A1B7")
+  DateRemboursement          DateTime?
+  idTransactionRemboursement Int?         @map("IdentifiantTransactionRemboursement")
+  reservation                Reservation? @relation(fields: [reservationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Transactions_Reservation")
+  utilisateur                User         @relation(fields: [utilisateurId], references: [id], onUpdate: NoAction, map: "FK_Transactions_Utilisateur")
+
+  @@index([DateTransaction], map: "IX_Transactions_Date")
+  @@index([reservationId], map: "IX_Transactions_Reservation")
+  @@index([StatutTransaction], map: "IX_Transactions_Statut")
+  @@index([TypeTransaction], map: "IX_Transactions_Type")
+  @@index([utilisateurId], map: "IX_Transactions_Utilisateur")
+  // Composite index for analytics queries
+  @@index([StatutTransaction, DateTransaction], map: "IX_Transactions_Analytics")
+  @@map("Transactions")
+}
+
+model MethodePaiementUtilisateur {
+  id                      Int       @id(map: "PK__Methodes__37E36899AA4F89D4") @default(autoincrement()) @map("IdentifiantMethode")
+  utilisateurId           Int       @map("IdentifiantUtilisateur")
+  TypeMethode             String    @db.NVarChar(50)
+  EstMethodePrincipale    Boolean?  @default(false, map: "DF__MethodesP__EstMe__2BE97B0D")
+  Actif                   Boolean?  @default(true, map: "DF__MethodesP__Actif__2CDD9F46")
+  Alias                   String?   @db.NVarChar(100)
+  DerniersChiffres        String?   @db.NVarChar(10)
+  Fournisseur             String?   @db.NVarChar(100)
+  DateExpiration          DateTime? @db.Date
+  DateAjout               DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__MethodesP__DateA__2DD1C37F")
+  DateDerniereUtilisation DateTime?
+  Utilisateurs            User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_MethodesPaiement_Utilisateur")
+
+  @@index([EstMethodePrincipale], map: "IX_MethodesPaiement_Principal")
+  @@index([utilisateurId], map: "IX_MethodesPaiement_Utilisateur")
+  @@map("MethodesPaiementUtilisateurs")
+}
+
+model Facture {
+  id            Int         @id(map: "PK__Factures__E45C7A1993955F19") @default(autoincrement()) @map("IdentifiantFacture")
+  NumeroFacture String      @unique(map: "UQ__Factures__CF12F9A27531D53B") @db.NVarChar(50)
+  reservationId Int         @map("IdentifiantReservation")
+  utilisateurId Int         @map("IdentifiantUtilisateur")
+  DateEmission  DateTime?   @default(dbgenerated("sysdatetime()"), map: "DF__Factures__DateEm__3296789C")
+  DateEcheance  DateTime?
+  MontantHT     Decimal     @db.Decimal(10, 2)
+  TauxTVA       Decimal?    @default(0, map: "DF__Factures__TauxTV__338A9CD5") @db.Decimal(5, 2)
+  MontantTVA    Decimal?    @db.Decimal(20, 8)
+  MontantTTC    Decimal?    @db.Decimal(21, 8)
+  StatutFacture String?     @default("Emise", map: "DF__Factures__Statut__347EC10E") @db.NVarChar(20)
+  CheminPDF     String?     @db.NVarChar(500)
+  DatePaiement  DateTime?
+  NotesFacture  String?
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onUpdate: NoAction, map: "FK_Factures_Reservation")
+  Utilisateurs  User        @relation(fields: [utilisateurId], references: [id], onUpdate: NoAction, map: "FK_Factures_Utilisateur")
+
+  @@index([DateEmission], map: "IX_Factures_DateEmission")
+  @@index([reservationId], map: "IX_Factures_Reservation")
+  @@index([StatutFacture], map: "IX_Factures_Statut")
+  @@index([utilisateurId], map: "IX_Factures_Utilisateur")
+  @@map("Factures")
+}
+
+model CodePromo {
+  id                         Int                    @id(map: "PK__CodesPro__6B492C9E87A963A2") @default(autoincrement()) @map("IdentifiantPromo")
+  CodePromo                  String                 @unique(map: "UQ__CodesPro__2D4B0570E0BD24D9") @db.NVarChar(50)
+  TypePromo                  String?                @db.NVarChar(20)
+  ValeurPromo                Decimal                @db.Decimal(10, 2)
+  MontantMinimum             Decimal?               @db.Decimal(10, 2)
+  NombreUtilisationsMax      Int?
+  NombreUtilisationsActuel   Int?                   @default(0, map: "DF__CodesProm__Nombr__3C1FE2D6")
+  UtilisationsParUtilisateur Int?                   @default(1, map: "DF__CodesProm__Utili__3D14070F")
+  DateDebut                  DateTime
+  DateFin                    DateTime
+  Actif                      Boolean?               @default(true, map: "DF__CodesProm__Actif__3E082B48")
+  CategoriesApplicables      String?                @db.NVarChar(Max)
+  VehiculesApplicables       String?                @db.NVarChar(Max)
+  UtilisateursApplicables    String?                @db.NVarChar(Max)
+  Description                String?                @db.NVarChar(500)
+  CreePar                    Int?
+  DateCreation               DateTime?              @default(dbgenerated("sysdatetime()"), map: "DF__CodesProm__DateC__3EFC4F81")
+  Utilisateurs               User?                  @relation(fields: [CreePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_CodesPromo_Createur")
+  utilisations               UtilisationCodePromo[]
+
+  @@index([Actif], map: "IX_CodesPromo_Actif")
+  @@index([CodePromo], map: "IX_CodesPromo_Code")
+  @@index([DateDebut, DateFin], map: "IX_CodesPromo_Dates")
+  @@map("CodesPromo")
+}
+
+model UtilisationCodePromo {
+  id              Int         @id(map: "PK__Utilisat__0A998068FD754973") @default(autoincrement()) @map("IdentifiantUtilisation")
+  promoId         Int         @map("IdentifiantPromo")
+  utilisateurId   Int         @map("IdentifiantUtilisateur")
+  reservationId   Int         @map("IdentifiantReservation")
+  MontantRemise   Decimal     @db.Decimal(10, 2)
+  DateUtilisation DateTime?   @default(dbgenerated("sysdatetime()"), map: "DF__Utilisati__DateU__42CCE065")
+  promo           CodePromo   @relation(fields: [promoId], references: [id], onUpdate: NoAction, map: "FK_UtilisationsPromo_Promo")
+  Reservations    Reservation @relation(fields: [reservationId], references: [id], onUpdate: NoAction, map: "FK_UtilisationsPromo_Reservation")
+  Utilisateurs    User        @relation(fields: [utilisateurId], references: [id], onUpdate: NoAction, map: "FK_UtilisationsPromo_Utilisateur")
+
+  @@index([promoId], map: "IX_UtilisationsPromo_Promo")
+  @@index([reservationId], map: "IX_UtilisationsPromo_Reservation")
+  @@index([utilisateurId], map: "IX_UtilisationsPromo_Utilisateur")
+  @@map("UtilisationsCodesPromo")
+}
+
+model ProgrammeFidelite {
+  id                   Int       @id(map: "PK__Programm__DDF908CF984993AD") @default(autoincrement()) @map("IdentifiantProgramme")
+  NomProgramme         String    @db.NVarChar(100)
+  Niveau               String?   @db.NVarChar(50)
+  SeuilPoints          Int
+  PourcentageRemise    Decimal?  @default(0, map: "DF__Programme__Pourc__4979DDF4") @db.Decimal(5, 2)
+  PrioriteSuppor       Boolean?  @default(false, map: "DF__Programme__Prior__4A6E022D")
+  AnnulationGratuite   Boolean?  @default(false, map: "DF__Programme__Annul__4B622666")
+  AccesExclusif        Boolean?  @default(false, map: "DF__Programme__Acces__4C564A9F")
+  SurclassementGratuit Boolean?  @default(false, map: "DF__Programme__Surcl__4D4A6ED8")
+  Avantages            String?   @db.NVarChar(Max)
+  CouleurBadge         String?   @db.NVarChar(20)
+  IconeBadge           String?   @db.NVarChar(255)
+  Actif                Boolean?  @default(true, map: "DF__Programme__Actif__4E3E9311")
+  DateCreation         DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Programme__DateC__4F32B74A")
+
+  @@index([Niveau], map: "IDX_ProgrammeFidelite_Niveau")
+  @@index([SeuilPoints], map: "IDX_ProgrammeFidelite_Seuil")
+  @@map("ProgrammeFidelite")
+}
+
+model PointFidelite {
+  id              Int       @id(map: "PK__PointsFi__211FE770D7F29A7C") @default(autoincrement()) @map("IdentifiantPoint")
+  utilisateurId   Int       @map("IdentifiantUtilisateur")
+  TypeAcquisition String?   @db.NVarChar(50)
+  PointsAcquis    Int
+  PointsUtilises  Int?      @default(0, map: "DF__PointsFid__Point__5303482E")
+  SoldePoints     Int?
+  DateAcquisition DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__PointsFid__DateA__53F76C67")
+  DateExpiration  DateTime?
+  idSource        Int?      @map("IdentifiantSource")
+  TypeSource      String?   @db.NVarChar(50)
+  Description     String?   @db.NVarChar(500)
+  EstExpire       Int
+  utilisateur     User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_PointsFidelite_Utilisateur")
+
+  @@index([DateAcquisition], map: "IDX_Points_Date")
+  @@index([DateExpiration], map: "IDX_Points_Expiration")
+  @@index([TypeAcquisition], map: "IDX_Points_Type")
+  @@index([utilisateurId], map: "IDX_Points_Utilisateur")
+  @@map("PointsFidelite")
+}
+
+model ProgrammeParrainage {
+  id                         Int       @id(map: "PK__Programm__0FE700422AD1954B") @default(autoincrement()) @map("IdentifiantParrainage")
+  parrainId                  Int       @map("IdentifiantParrain")
+  filleulId                  Int?      @map("IdentifiantFilleul")
+  CodeParrainage             String    @unique(map: "UQ__Programm__8CCA82E09620C346") @db.NVarChar(50)
+  EmailFilleul               String?   @db.NVarChar(255)
+  DateInvitation             DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Programme__DateI__59B045BD")
+  DateInscription            DateTime?
+  PointsParrain              Int?      @default(0, map: "DF__Programme__Point__5AA469F6")
+  PointsFilleul              Int?      @default(0, map: "DF__Programme__Point__5B988E2F")
+  RemiseParrain              Decimal?  @default(0, map: "DF__Programme__Remis__5C8CB268") @db.Decimal(10, 2)
+  RemiseFilleul              Decimal?  @default(0, map: "DF__Programme__Remis__5D80D6A1") @db.Decimal(10, 2)
+  CommissionParrain          Decimal?  @db.Decimal(5, 2)
+  StatutParrainage           String?   @default("EnAttente", map: "DF__Programme__Statu__5E74FADA") @db.NVarChar(20)
+  PremierAchatEffectue       Boolean?  @default(false, map: "DF__Programme__Premi__605D434C")
+  DatePremierAchat           DateTime?
+  MontantPremierAchat        Decimal?  @db.Decimal(10, 2)
+  RecompensesAttribuees      Boolean?  @default(false, map: "DF__Programme__Recom__61516785")
+  DateAttributionRecompenses DateTime?
+  filleul                    User?     @relation("Referred", fields: [filleulId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Parrainage_Filleul")
+  parrain                    User      @relation("Referrer", fields: [parrainId], references: [id], onUpdate: NoAction, map: "FK_Parrainage_Parrain")
+
+  @@unique([parrainId, filleulId], map: "UQ_Parrain_Filleul")
+  @@index([CodeParrainage], map: "IDX_Parrainage_Code")
+  @@index([filleulId], map: "IDX_Parrainage_Filleul")
+  @@index([parrainId], map: "IDX_Parrainage_Parrain")
+  @@index([StatutParrainage], map: "IDX_Parrainage_Statut")
+  @@map("ProgrammeParrainage")
+}
+
+model Notification {
+  id                   Int       @id(map: "PK__Notifica__AC8A785D0C7B523E") @default(autoincrement()) @map("IdentifiantNotification")
+  utilisateurId        Int       @map("IdentifiantUtilisateur")
+  TypeNotification     String    @db.NVarChar(50)
+  TitreNotification    String    @db.NVarChar(255)
+  MessageNotification  String    @db.NVarChar(Max)
+  LienNotification     String?   @db.NVarChar(500)
+  IconeNotification    String?   @db.NVarChar(50)
+  PrioriteNotification String?   @default("Normal", map: "DF__Notificat__Prior__0682EC34") @db.NVarChar(20)
+  CanalEnvoi           String?   @db.NVarChar(20)
+  DateCreation         DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Notificat__DateC__095F58DF")
+  DateEnvoi            DateTime?
+  DateLecture          DateTime?
+  EstLu                Boolean?  @default(false, map: "DF__Notificat__EstLu__0A537D18")
+  EstArchive           Boolean?  @default(false, map: "DF__Notificat__EstAr__0B47A151")
+  MetaDonnees          String?   @db.NVarChar(Max)
+  utilisateur          User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Notifications_Utilisateur")
+
+  @@index([DateCreation], map: "IX_Notifications_DateCreation")
+  @@index([EstLu], map: "IX_Notifications_EstLu")
+  @@index([PrioriteNotification], map: "IX_Notifications_Priorite")
+  @@index([TypeNotification], map: "IX_Notifications_Type")
+  @@index([utilisateurId], map: "IX_Notifications_Utilisateur")
+  @@map("Notifications")
+}
+
+model Message {
+  id                                                          Int           @id(map: "PK__Messages__FEA4AA2BE955111E") @default(autoincrement()) @map("IdentifiantMessage")
+  conversationId                                              Int           @map("IdentifiantConversation")
+  expediteurId                                                Int           @map("IdentifiantExpediteur")
+  destinataireId                                              Int           @map("IdentifiantDestinataire")
+  ContenuMessage                                              String        @db.NVarChar(Max)
+  TypeMessage                                                 String?       @default("Texte", map: "DF__Messages__TypeMe__6F9F86DC") @db.NVarChar(20)
+  PiecesJointes                                               String?       @db.NVarChar(Max)
+  DateEnvoi                                                   DateTime?     @default(dbgenerated("sysdatetime()"), map: "DF__Messages__DateEn__7187CF4E")
+  DateLecture                                                 DateTime?
+  EstLu                                                       Boolean?      @default(false, map: "DF__Messages__EstLu__727BF387")
+  EstArchive                                                  Boolean?      @default(false, map: "DF__Messages__EstArc__737017C0")
+  EstSupprime                                                 Boolean?      @default(false, map: "DF__Messages__EstSup__74643BF9")
+  Conversations                                               Conversations @relation(fields: [conversationId], references: [IdentifiantConversation], onDelete: Cascade, onUpdate: NoAction, map: "FK_Messages_Conversation")
+  Utilisateurs_Messages_IdentifiantDestinataireToUtilisateurs User          @relation("Messages_IdentifiantDestinataireToUtilisateurs", fields: [destinataireId], references: [id], onUpdate: NoAction, map: "FK_Messages_Destinataire")
+  expediteur                                                  User          @relation("SenderMessages", fields: [expediteurId], references: [id], onUpdate: NoAction, map: "FK_Messages_Expediteur")
+
+  @@index([conversationId], map: "IX_Messages_Conversation")
+  @@index([DateEnvoi], map: "IX_Messages_DateEnvoi")
+  @@index([destinataireId], map: "IX_Messages_Destinataire")
+  @@index([EstLu], map: "IX_Messages_EstLu")
+  @@index([expediteurId], map: "IX_Messages_Expediteur")
+  @@map("Messages")
+}
+
+model Avis {
+  id                     Int                @id(map: "PK__Avis__4E2C5E7B3D046101") @default(autoincrement()) @map("IdentifiantAvis")
+  reservationId          Int                @unique(map: "UQ__Avis__8DDAB0684700AD70") @map("IdentifiantReservation")
+  auteurId               Int                @map("IdentifiantAuteur")
+  cibleId                Int                @map("IdentifiantCible")
+  TypeCible              String             @db.NVarChar(20)
+  NoteGlobale            Decimal            @db.Decimal(3, 2)
+  NoteProprete           Decimal?           @db.Decimal(3, 2)
+  NoteConformite         Decimal?           @db.Decimal(3, 2)
+  NoteCommunication      Decimal?           @db.Decimal(3, 2)
+  NoteEtatVehicule       Decimal?           @db.Decimal(3, 2)
+  NoteRapportQualitePrix Decimal?           @db.Decimal(3, 2)
+  CommentaireAvis        String?            @db.NVarChar(2000)
+  PhotosAvis             String?            @db.NVarChar(Max)
+  RecommandeCible        Boolean?           @default(true, map: "DF__Avis__Recommande__16B953FD")
+  StatutAvis             String?            @default("Publie", map: "DF__Avis__StatutAvis__17AD7836") @db.NVarChar(20)
+  DateCreation           DateTime?          @default(dbgenerated("sysdatetime()"), map: "DF__Avis__DateCreati__1995C0A8")
+  DateModification       DateTime?
+  NombreSignalements     Int?               @default(0, map: "DF__Avis__NombreSign__1A89E4E1")
+  NombreUtile            Int?               @default(0, map: "DF__Avis__NombreUtil__1B7E091A")
+  NombreInutile          Int?               @default(0, map: "DF__Avis__NombreInut__1C722D53")
+  ReponseProprietaire    String?
+  DateReponse            DateTime?
+  auteur                 User               @relation("ReviewAuthor", fields: [auteurId], references: [id], onUpdate: NoAction, map: "FK_Avis_Auteur")
+  reservation            Reservation        @relation(fields: [reservationId], references: [id], onUpdate: NoAction, map: "FK_Avis_Reservation")
+  SignalementsAvis       SignalementsAvis[]
+
+  @@index([auteurId], map: "IX_Avis_Auteur")
+  @@index([cibleId, TypeCible], map: "IX_Avis_Cible")
+  @@index([DateCreation], map: "IX_Avis_DateCreation")
+  @@index([NoteGlobale(sort: Desc)], map: "IX_Avis_Note")
+  @@index([reservationId], map: "IX_Avis_Reservation")
+  @@index([StatutAvis], map: "IX_Avis_Statut")
+  @@map("Avis")
+}
+
+model Reclamation {
+  id                                               Int          @id(map: "PK__Reclamat__A28B1A4859C81F0A") @default(autoincrement()) @map("IdentifiantReclamation")
+  NumeroReclamation                                String       @unique(map: "UQ__Reclamat__94B8C086110B675F") @db.NVarChar(50)
+  reservationId                                    Int?         @map("IdentifiantReservation")
+  reclamantId                                      Int          @map("IdentifiantReclamant")
+  TypeReclamation                                  String       @db.NVarChar(50)
+  CategorieReclamation                             String?      @db.NVarChar(50)
+  SujetReclamation                                 String       @db.NVarChar(255)
+  DescriptionReclamation                           String       @db.NVarChar(Max)
+  PieceJointes                                     String?      @db.NVarChar(Max)
+  MontantReclame                                   Decimal?     @db.Decimal(10, 2)
+  StatutReclamation                                String?      @default("Ouverte", map: "DF__Reclamati__Statu__2CA8951C") @db.NVarChar(30)
+  PrioriteReclamation                              String?      @default("Normal", map: "DF__Reclamati__Prior__2E90DD8E") @db.NVarChar(20)
+  DateCreation                                     DateTime?    @default(dbgenerated("sysdatetime()"), map: "DF__Reclamati__DateC__30792600")
+  DateResolution                                   DateTime?
+  DateFermeture                                    DateTime?
+  AssigneA                                         Int?
+  ReponseReclamation                               String?      @db.NVarChar(Max)
+  ActionsPrises                                    String?      @db.NVarChar(Max)
+  MontantRembourse                                 Decimal?     @db.Decimal(10, 2)
+  SatisfactionClient                               Decimal?     @db.Decimal(3, 2)
+  Utilisateurs_Reclamations_AssigneAToUtilisateurs User?        @relation("Reclamations_AssigneAToUtilisateurs", fields: [AssigneA], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Reclamations_Assignation")
+  reclamant                                        User         @relation("ComplaintUser", fields: [reclamantId], references: [id], onUpdate: NoAction, map: "FK_Reclamations_Reclamant")
+  reservation                                      Reservation? @relation(fields: [reservationId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Reclamations_Reservation")
+
+  @@index([DateCreation], map: "IX_Reclamations_DateCreation")
+  @@index([PrioriteReclamation], map: "IX_Reclamations_Priorite")
+  @@index([reclamantId], map: "IX_Reclamations_Reclamant")
+  @@index([reservationId], map: "IX_Reclamations_Reservation")
+  @@index([StatutReclamation], map: "IX_Reclamations_Statut")
+  @@index([TypeReclamation], map: "IX_Reclamations_Type")
+  @@map("Reclamations")
+}
+
+model Incident {
+  id                        Int                       @id(map: "PK__Incident__F77D6A429699F399") @default(autoincrement()) @map("IdentifiantIncident")
+  NumeroIncident            String                    @unique(map: "UQ__Incident__5C5A3E2D72111F34") @db.NVarChar(50)
+  reservationId             Int                       @map("IdentifiantReservation")
+  vehiculeId                Int                       @map("IdentifiantVehicule")
+  TypeIncident              String                    @db.NVarChar(50)
+  GraviteIncident           String                    @db.NVarChar(20)
+  DescriptionIncident       String                    @db.NVarChar(Max)
+  DateIncident              DateTime
+  LieuIncident              String?                   @db.NVarChar(500)
+  CoordonneesIncident       Unsupported("geography")?
+  PhotosIncident            String?                   @db.NVarChar(Max)
+  RapportPolice             String?                   @db.NVarChar(500)
+  NumeroConstat             String?                   @db.NVarChar(100)
+  TierImplique              Boolean?                  @default(false, map: "DF__Incidents__TierI__390E6C01")
+  InfoTiers                 String?                   @db.NVarChar(Max)
+  AssuranceNotifiee         Boolean?                  @default(false, map: "DF__Incidents__Assur__3A02903A")
+  DateNotificationAssurance DateTime?
+  NumeroSinistre            String?                   @db.NVarChar(100)
+  EstimationDommages        Decimal?                  @db.Decimal(10, 2)
+  CoutReparations           Decimal?                  @db.Decimal(10, 2)
+  ResponsabiliteLocataire   Boolean?
+  StatutTraitement          String?                   @default("Declare", map: "DF__Incidents__Statu__3AF6B473") @db.NVarChar(30)
+  DateDeclaration           DateTime?                 @default(dbgenerated("sysdatetime()"), map: "DF__Incidents__DateD__3CDEFCE5")
+  DateResolution            DateTime?
+  TraitePar                 Int?
+  NotesTraitement           String?                   @db.NVarChar(Max)
+  reservation               Reservation               @relation(fields: [reservationId], references: [id], onUpdate: NoAction, map: "FK_Incidents_Reservation")
+  Utilisateurs              User?                     @relation(fields: [TraitePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Incidents_Traiteur")
+  vehicule                  Vehicle                   @relation(fields: [vehiculeId], references: [id], onUpdate: NoAction, map: "FK_Incidents_Vehicule")
+
+  @@index([DateIncident], map: "IX_Incidents_DateIncident")
+  @@index([reservationId], map: "IX_Incidents_Reservation")
+  @@index([StatutTraitement], map: "IX_Incidents_Statut")
+  @@index([TypeIncident], map: "IX_Incidents_Type")
+  @@index([vehiculeId], map: "IX_Incidents_Vehicule")
+  @@map("Incidents")
+}
+
+model Favori {
+  id                Int       @id(map: "PK__Favoris__57A07D10F7DB1CCD") @default(autoincrement()) @map("IdentifiantFavori")
+  utilisateurId     Int       @map("IdentifiantUtilisateur")
+  vehiculeId        Int       @map("IdentifiantVehicule")
+  DateAjout         DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Favoris__DateAjo__438BFA74")
+  NotesPersonnelles String?   @db.NVarChar(500)
+  utilisateur       User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Favoris_Utilisateur")
+  vehicule          Vehicle   @relation(fields: [vehiculeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Favoris_Vehicule")
+
+  @@unique([utilisateurId, vehiculeId], map: "UQ_Favoris_Utilisateur_Vehicule")
+  @@index([DateAjout], map: "IX_Favoris_DateAjout")
+  @@index([utilisateurId], map: "IX_Favoris_Utilisateur")
+  @@index([vehiculeId], map: "IX_Favoris_Vehicule")
+  @@map("Favoris")
+}
+
+model RecherchesSauvegardee {
+  id                      Int       @id(map: "PK__Recherch__6BDCAB727D0F820E") @default(autoincrement()) @map("IdentifiantRecherche")
+  utilisateurId           Int       @map("IdentifiantUtilisateur")
+  NomRecherche            String    @db.NVarChar(200)
+  CriteresRecherche       String    @db.NVarChar(Max)
+  NotificationsActives    Boolean?  @default(true, map: "DF__Recherche__Notif__4850AF91")
+  FrequenceNotifications  String?   @db.NVarChar(20)
+  DateCreation            DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Recherche__DateC__4A38F803")
+  DateDerniereUtilisation DateTime?
+  NombreUtilisations      Int?      @default(0, map: "DF__Recherche__Nombr__4B2D1C3C")
+  utilisateur             User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_RecherchesSauvegardees_Utilisateur")
+
+  @@index([DateCreation], map: "IX_RecherchesSauvegardees_DateCreation")
+  @@index([utilisateurId], map: "IX_RecherchesSauvegardees_Utilisateur")
+  @@map("RecherchesSauvegardees")
+}
+
+model RegleTarificationDynamique {
+  id                 Int       @id(map: "PK__ReglesTa__AE50E0081F8BA72C") @default(autoincrement()) @map("IdentifiantRegle")
+  vehiculeId         Int       @map("IdentifiantVehicule")
+  TypeCondition      String?   @db.NVarChar(50)
+  ValeurCondition    String?   @db.NVarChar(200)
+  TypeModificateur   String?   @db.NVarChar(20)
+  ValeurModificateur Decimal   @db.Decimal(10, 2)
+  Operation          String?   @db.NVarChar(10)
+  PrixMinimum        Decimal?  @db.Decimal(10, 2)
+  PrixMaximum        Decimal?  @db.Decimal(10, 2)
+  DateDebut          DateTime
+  DateFin            DateTime?
+  HeureDebut         DateTime? @db.Time
+  HeureFin           DateTime? @db.Time
+  JoursSemaine       String?   @db.NVarChar(50)
+  Priorite           Int?      @default(0, map: "DF__ReglesTar__Prior__6FD49106")
+  Actif              Boolean?  @default(true, map: "DF__ReglesTar__Actif__70C8B53F")
+  Description        String?   @db.NVarChar(500)
+  vehicule           Vehicle   @relation(fields: [vehiculeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_RegleTarification_Vehicule")
+
+  @@index([Actif], map: "IDX_ReglesTarification_Actif")
+  @@index([DateDebut, DateFin], map: "IDX_ReglesTarification_Dates")
+  @@index([Priorite(sort: Desc)], map: "IDX_ReglesTarification_Priorite")
+  @@index([vehiculeId], map: "IDX_ReglesTarification_Vehicule")
+  @@map("ReglesTarificationDynamique")
+}
+
+model HistoriquePrixVehicule {
+  id                BigInt    @id(map: "PK__Historiq__2A5B31889BEA1CC9") @default(autoincrement()) @map("IdentifiantHistorique")
+  vehiculeId        Int       @map("IdentifiantVehicule")
+  PrixJournalier    Decimal   @db.Decimal(10, 2)
+  PrixHebdomadaire  Decimal?  @db.Decimal(10, 2)
+  PrixMensuel       Decimal?  @db.Decimal(10, 2)
+  FacteursInfluence String?   @db.NVarChar(Max)
+  TauxOccupation    Decimal?  @db.Decimal(5, 2)
+  DemandePrevue     Decimal?  @db.Decimal(5, 2)
+  SaisonTouristique String?   @db.NVarChar(50)
+  EvenementsLocaux  String?   @db.NVarChar(Max)
+  DateApplication   DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Historiqu__DateA__74994623")
+  vehicule          Vehicle   @relation(fields: [vehiculeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_HistoriquePrix_Vehicule")
+
+  @@index([vehiculeId, DateApplication], map: "IDX_HistoriquePrix_Vehicule_Date")
+  @@map("HistoriquePrixVehicules")
+}
+
+model AggregationUtilisateur {
+  id                           Int       @id(map: "PK__Aggregat__8262E3F0685E7473") @default(autoincrement()) @map("IdentifiantAggregation")
+  utilisateurId                Int       @unique(map: "UQ__Aggregat__09949E0B17C17441") @map("IdentifiantUtilisateur")
+  NombreReservationsTotal      Int?      @default(0, map: "DF__Aggregati__Nombr__5B638405")
+  NombreReservationsConfirmees Int?      @default(0, map: "DF__Aggregati__Nombr__5C57A83E")
+  NombreReservationsAnnulees   Int?      @default(0, map: "DF__Aggregati__Nombr__5D4BCC77")
+  TauxAnnulation               Float?
+  DureeTotalLocations          Int?      @default(0, map: "DF__Aggregati__Duree__5E3FF0B0")
+  MontantTotalDepense          Decimal?  @default(0, map: "DF__Aggregati__Monta__5F3414E9") @db.Decimal(15, 2)
+  MontantMoyenReservation      Decimal?  @db.Decimal(26, 13)
+  NoteMoyenneDonnee            Decimal?  @db.Decimal(3, 2)
+  NoteMoyenneRecue             Decimal?  @db.Decimal(3, 2)
+  NombreAvisDonnes             Int?      @default(0, map: "DF__Aggregati__Nombr__60283922")
+  NombreAvisRecus              Int?      @default(0, map: "DF__Aggregati__Nombr__611C5D5B")
+  DerniereReservationDate      DateTime?
+  DerniereConnexionDate        DateTime?
+  DernierPaiementDate          DateTime?
+  CategoriePreferee            Int?
+  VillePreferee                String?   @db.NVarChar(100)
+  MarquePreferee               Int?
+  BudgetMoyen                  Decimal?  @db.Decimal(10, 2)
+  DureeMoyenneLocation         Int?
+  TauxReponse                  Decimal?  @db.Decimal(5, 2)
+  DelaiMoyenReponse            Int?
+  TauxConfirmation             Decimal?  @db.Decimal(5, 2)
+  DateCalcul                   DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Aggregati__DateC__62108194")
+  DateMiseAJour                DateTime?
+  utilisateur                  User      @relation(fields: [utilisateurId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Aggregation_Utilisateur")
+
+  @@index([DateCalcul], map: "IDX_Aggregations_Calcul")
+  @@index([DateMiseAJour], map: "IDX_Aggregations_MiseAJour")
+  @@map("AggregationsUtilisateurs")
+}
+
+model A_B_Tests {
+  IdentifiantTest         Int       @id(map: "PK__A_B_Test__0FB40E7EDBFA1A9F") @default(autoincrement())
+  CodeTest                String    @unique(map: "UQ__A_B_Test__F578AEFE072605E8") @db.NVarChar(100)
+  NomTest                 String    @db.NVarChar(100)
+  DescriptionTest         String?
+  ObjectifTest            String?   @db.NVarChar(500)
+  HypotheseTest           String?
+  MetriquePrincipale      String?   @db.NVarChar(100)
+  PopulationCible         String?   @db.NVarChar(Max)
+  TailleEchantillon       Int?
+  PourcentageVarianteA    Int?      @default(50, map: "DF__A_B_Tests__Pourc__705EA0EB")
+  PourcentageVarianteB    Int?      @default(50, map: "DF__A_B_Tests__Pourc__7152C524")
+  VarianteA               String?   @db.NVarChar(Max)
+  VarianteB               String?   @db.NVarChar(Max)
+  DateDebut               DateTime?
+  DateFin                 DateTime?
+  DureeMinimaleJours      Int?      @default(7, map: "DF__A_B_Tests__Duree__7246E95D")
+  StatutTest              String?   @default("Brouillon", map: "DF__A_B_Tests__Statu__733B0D96") @db.NVarChar(20)
+  ParticipantsVarianteA   Int?      @default(0, map: "DF__A_B_Tests__Parti__75235608")
+  ParticipantsVarianteB   Int?      @default(0, map: "DF__A_B_Tests__Parti__76177A41")
+  ConversionsVarianteA    Int?      @default(0, map: "DF__A_B_Tests__Conve__770B9E7A")
+  ConversionsVarianteB    Int?      @default(0, map: "DF__A_B_Tests__Conve__77FFC2B3")
+  TauxConversionA         Float?
+  TauxConversionB         Float?
+  SignificanceStatistique Decimal?  @db.Decimal(5, 4)
+  VarianteGagnante        String?   @db.NVarChar(1)
+  Resultats               String?   @db.NVarChar(Max)
+  CreePar                 Int?
+  DateCreation            DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__A_B_Tests__DateC__79E80B25")
+  Utilisateurs            User?     @relation(fields: [CreePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ABTests_Createur")
+
+  @@index([CodeTest], map: "IDX_ABTests_Code")
+  @@index([DateDebut, DateFin], map: "IDX_ABTests_Dates")
+  @@index([StatutTest], map: "IDX_ABTests_Statut")
+}
+
+model CacheRecherches {
+  IdentifiantCache    Int       @id(map: "PK__CacheRec__FC7433A492B60250") @default(autoincrement())
+  CleCache            String    @unique(map: "UQ__CacheRec__60E4F98236974F7A") @db.NVarChar(500)
+  Resultats           String    @db.NVarChar(Max)
+  NombreResultats     Int
+  DateCreation        DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__CacheRech__DateC__4FF1D159")
+  DateExpiration      DateTime
+  CompteUtilisations  Int?      @default(0, map: "DF__CacheRech__Compt__50E5F592")
+  DerniereUtilisation DateTime?
+  ParametresRecherche String?   @db.NVarChar(Max)
+
+  @@index([DerniereUtilisation(sort: Desc)], map: "IDX_Cache_DerniereUtilisation")
+  @@index([DateExpiration], map: "IDX_Cache_Expiration")
+  @@index([CompteUtilisations(sort: Desc)], map: "IDX_Cache_Utilisations")
+}
+
+model CacheStatistiques {
+  IdentifiantStatCache Int       @id(map: "PK__CacheSta__9BEE569CCB2E4E01") @default(autoincrement())
+  TypeCache            String    @db.NVarChar(50)
+  Periode              String?   @db.NVarChar(20)
+  RequetesTotal        Int?      @default(0, map: "DF__CacheStat__Reque__54B68676")
+  RequetesCache        Int?      @default(0, map: "DF__CacheStat__Reque__55AAAAAF")
+  RequetesMiss         Int?      @default(0, map: "DF__CacheStat__Reque__569ECEE8")
+  TauxReussite         Float?
+  TempsMoyenSansCache  Decimal?  @db.Decimal(10, 4)
+  TempsMoyenAvecCache  Decimal?  @db.Decimal(10, 4)
+  GainPerformance      Decimal?  @db.Decimal(30, 15)
+  DateDebut            DateTime
+  DateFin              DateTime
+  DateCalcul           DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__CacheStat__DateC__5792F321")
+
+  @@index([DateCalcul], map: "IDX_StatCache_Date")
+  @@index([TypeCache], map: "IDX_StatCache_Type")
+}
+
+model ConfigurationBusinessRules {
+  IdentifiantRegle                                                 Int       @id(map: "PK__Configur__AE50E00853227631") @default(autoincrement())
+  CodeRegle                                                        String    @unique(map: "UQ__Configur__64A35F47168F0703") @db.NVarChar(100)
+  TypeRegle                                                        String    @db.NVarChar(100)
+  NomRegle                                                         String    @db.NVarChar(200)
+  DescriptionRegle                                                 String?
+  Conditions                                                       String    @db.NVarChar(Max)
+  Actions                                                          String    @db.NVarChar(Max)
+  Priorite                                                         Int?      @default(0, map: "DF__Configura__Prior__66D536B1")
+  Actif                                                            Boolean?  @default(true, map: "DF__Configura__Actif__67C95AEA")
+  DateDebut                                                        DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Configura__DateD__68BD7F23")
+  DateFin                                                          DateTime?
+  CreePar                                                          Int?
+  DateCreation                                                     DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Configura__DateC__69B1A35C")
+  ModifiePar                                                       Int?
+  DateModification                                                 DateTime?
+  NombreExecutions                                                 Int?      @default(0, map: "DF__Configura__Nombr__6AA5C795")
+  DateDerniereExecution                                            DateTime?
+  Utilisateurs_ConfigurationBusinessRules_CreeParToUtilisateurs    User?     @relation("ConfigurationBusinessRules_CreeParToUtilisateurs", fields: [CreePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_BusinessRules_Createur")
+  Utilisateurs_ConfigurationBusinessRules_ModifieParToUtilisateurs User?     @relation("ConfigurationBusinessRules_ModifieParToUtilisateurs", fields: [ModifiePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_BusinessRules_Modificateur")
+
+  @@index([Actif], map: "IDX_BusinessRules_Actif")
+  @@index([CodeRegle], map: "IDX_BusinessRules_Code")
+  @@index([Priorite(sort: Desc)], map: "IDX_BusinessRules_Priorite")
+  @@index([TypeRegle], map: "IDX_BusinessRules_Type")
+}
+
+model Conversations {
+  IdentifiantConversation                                          Int          @id(map: "PK__Conversa__73B722014065E752") @default(autoincrement())
+  IdentifiantUtilisateur1                                          Int
+  IdentifiantUtilisateur2                                          Int
+  IdentifiantReservation                                           Int?
+  IdentifiantVehicule                                              Int?
+  SujetConversation                                                String?      @db.NVarChar(255)
+  StatutConversation                                               String?      @default("Active", map: "DF__Conversat__Statu__66161CA2") @db.NVarChar(20)
+  DateCreation                                                     DateTime?    @default(dbgenerated("sysdatetime()"), map: "DF__Conversat__DateC__67FE6514")
+  DateDernierMessage                                               DateTime?
+  NombreMessages                                                   Int?         @default(0, map: "DF__Conversat__Nombr__68F2894D")
+  Reservations                                                     Reservation? @relation(fields: [IdentifiantReservation], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Conversations_Reservation")
+  Utilisateurs_Conversations_IdentifiantUtilisateur1ToUtilisateurs User         @relation("Conversations_IdentifiantUtilisateur1ToUtilisateurs", fields: [IdentifiantUtilisateur1], references: [id], onUpdate: NoAction, map: "FK_Conversations_Utilisateur1")
+  Utilisateurs_Conversations_IdentifiantUtilisateur2ToUtilisateurs User         @relation("Conversations_IdentifiantUtilisateur2ToUtilisateurs", fields: [IdentifiantUtilisateur2], references: [id], onUpdate: NoAction, map: "FK_Conversations_Utilisateur2")
+  Vehicules                                                        Vehicle?     @relation(fields: [IdentifiantVehicule], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Conversations_Vehicule")
+  Messages                                                         Message[]
+
+  @@index([IdentifiantReservation], map: "IX_Conversations_Reservation")
+  @@index([StatutConversation], map: "IX_Conversations_Statut")
+  @@index([IdentifiantUtilisateur1], map: "IX_Conversations_Utilisateur1")
+  @@index([IdentifiantUtilisateur2], map: "IX_Conversations_Utilisateur2")
+}
+
+model DeclencheursNotifications {
+  IdentifiantDeclencheur Int                    @id(map: "PK__Declench__543B04B797FE28D0") @default(autoincrement())
+  TypeDeclencheur        String                 @db.NVarChar(100)
+  NomDeclencheur         String                 @db.NVarChar(200)
+  IdentifiantTemplate    Int
+  DelaiMinutes           Int?                   @default(0, map: "DF__Declenche__Delai__7FD5EEA5")
+  Conditions             String?                @db.NVarChar(Max)
+  Actif                  Boolean?               @default(true, map: "DF__Declenche__Actif__00CA12DE")
+  Priorite               Int?                   @default(5, map: "DF__Declenche__Prior__01BE3717")
+  DateCreation           DateTime?              @default(dbgenerated("sysdatetime()"), map: "DF__Declenche__DateC__02B25B50")
+  TemplatesNotifications TemplatesNotifications @relation(fields: [IdentifiantTemplate], references: [IdentifiantTemplate], onUpdate: NoAction, map: "FK_Declencheur_Template")
+
+  @@index([Actif], map: "IDX_Declencheurs_Actif")
+  @@index([Priorite(sort: Desc)], map: "IDX_Declencheurs_Priorite")
+  @@index([TypeDeclencheur], map: "IDX_Declencheurs_Type")
+}
+
+model DistancesPrecalculees {
+  IdentifiantOrigine     Int
+  IdentifiantDestination Int
+  DistanceMetres         Int
+  DureeMinutes           Int
+  DateCalcul             DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Distances__DateC__6A1BB7B0")
+
+  @@id([IdentifiantOrigine, IdentifiantDestination], map: "PK__Distance__7F0C426011383B21")
+  @@index([IdentifiantDestination], map: "IDX_Distances_Destination")
+  @@index([IdentifiantOrigine], map: "IDX_Distances_Origine")
+}
+
+model DonneesChiffrees {
+  IdentifiantChiffrement Int       @id(map: "PK__DonneesC__F5F8FCED5C31F5F3") @default(autoincrement())
+  TableOrigine           String    @db.NVarChar(100)
+  ColonneOrigine         String    @db.NVarChar(100)
+  IdentifiantLigne       Int
+  DonneesChiffrees       Bytes
+  Algorithme             String?   @default("AES_256", map: "DF__DonneesCh__Algor__17236851") @db.NVarChar(50)
+  VecteurInitialisation  Bytes?    @db.VarBinary(16)
+  DateChiffrement        DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__DonneesCh__DateC__18178C8A")
+  ChiffrePar             Int?
+  Utilisateurs           User?     @relation(fields: [ChiffrePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_DonneesChiffrees_Utilisateur")
+
+  @@index([TableOrigine, ColonneOrigine, IdentifiantLigne], map: "IDX_Chiffrement_Origine")
+}
+
+model JournalAudit {
+  IdentifiantAudit       BigInt    @id(map: "PK__JournalA__4A82A6EA979E9453") @default(autoincrement())
+  TypeAction             String    @db.NVarChar(50)
+  TableCible             String    @db.NVarChar(100)
+  IdentifiantLigne       Int
+  IdentifiantUtilisateur Int?
+  ActionEffectuee        String?   @db.NVarChar(20)
+  ValeursPrecedentes     String?   @db.NVarChar(Max)
+  NouvellesValeurs       String?   @db.NVarChar(Max)
+  AdresseIP              String?   @db.NVarChar(45)
+  UserAgent              String?   @db.NVarChar(500)
+  DateAction             DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__JournalAu__DateA__7EACC042")
+  DetailsSupplementaires String?   @db.NVarChar(Max)
+  Utilisateurs           User?     @relation(fields: [IdentifiantUtilisateur], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_JournalAudit_Utilisateur")
+
+  @@index([DateAction], map: "IX_JournalAudit_DateAction")
+  @@index([TableCible], map: "IX_JournalAudit_Table")
+  @@index([TypeAction], map: "IX_JournalAudit_TypeAction")
+  @@index([IdentifiantUtilisateur], map: "IX_JournalAudit_Utilisateur")
+}
+
+model LogsErreurs {
+  IdentifiantLog         BigInt    @id(map: "PK__LogsErre__03BA78F7CF789FFF") @default(autoincrement())
+  TypeErreur             String    @db.NVarChar(50)
+  MessageErreur          String    @db.NVarChar(Max)
+  StackTrace             String?   @db.NVarChar(Max)
+  Gravite                String?   @db.NVarChar(20)
+  IdentifiantUtilisateur Int?
+  URL                    String?   @db.NVarChar(500)
+  MethodeHTTP            String?   @db.NVarChar(10)
+  AdresseIP              String?   @db.NVarChar(45)
+  UserAgent              String?   @db.NVarChar(500)
+  DateErreur             DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__LogsErreu__DateE__0371755F")
+  Environnement          String?   @db.NVarChar(20)
+  Version                String?   @db.NVarChar(20)
+  EstResolu              Boolean?  @default(false, map: "DF__LogsErreu__EstRe__0559BDD1")
+  DateResolution         DateTime?
+  Utilisateurs           User?     @relation(fields: [IdentifiantUtilisateur], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_LogsErreurs_Utilisateur")
+
+  @@index([DateErreur], map: "IX_LogsErreurs_DateErreur")
+  @@index([EstResolu], map: "IX_LogsErreurs_EstResolu")
+  @@index([Gravite], map: "IX_LogsErreurs_Gravite")
+  @@index([TypeErreur], map: "IX_LogsErreurs_TypeErreur")
+}
+
+model SignalementsAvis {
+  IdentifiantSignalement                                           Int       @id(map: "PK__Signalem__61FF49E6D88C2E1B") @default(autoincrement())
+  IdentifiantAvis                                                  Int
+  IdentifiantSignaleur                                             Int
+  MotifSignalement                                                 String    @db.NVarChar(50)
+  DescriptionSignalement                                           String?
+  DateSignalement                                                  DateTime? @default(dbgenerated("sysdatetime()"), map: "DF__Signaleme__DateS__222B06A9")
+  StatutTraitement                                                 String?   @default("EnAttente", map: "DF__Signaleme__Statu__231F2AE2") @db.NVarChar(20)
+  DateTraitement                                                   DateTime?
+  TraitePar                                                        Int?
+  CommentairesTraitement                                           String?   @db.NVarChar(500)
+  Avis                                                             Avis      @relation(fields: [IdentifiantAvis], references: [id], onUpdate: NoAction, map: "FK_SignalementsAvis_Avis")
+  Utilisateurs_SignalementsAvis_IdentifiantSignaleurToUtilisateurs User      @relation("SignalementsAvis_IdentifiantSignaleurToUtilisateurs", fields: [IdentifiantSignaleur], references: [id], onUpdate: NoAction, map: "FK_SignalementsAvis_Signaleur")
+  Utilisateurs_SignalementsAvis_TraiteParToUtilisateurs            User?     @relation("SignalementsAvis_TraiteParToUtilisateurs", fields: [TraitePar], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_SignalementsAvis_Traiteur")
+
+  @@index([IdentifiantAvis], map: "IX_SignalementsAvis_Avis")
+  @@index([IdentifiantSignaleur], map: "IX_SignalementsAvis_Signaleur")
+  @@index([StatutTraitement], map: "IX_SignalementsAvis_Statut")
+}
+
+model TemplatesNotifications {
+  IdentifiantTemplate       Int                         @id(map: "PK__Template__423E75D0150A9BA3") @default(autoincrement())
+  TypeNotification          String                      @unique(map: "UQ__Template__808E03D3FDEE5BAF") @db.NVarChar(100)
+  NomTemplate               String                      @db.NVarChar(200)
+  TitreTemplate             String                      @db.NVarChar(255)
+  CorpsTemplate             String                      @db.NVarChar(Max)
+  CorpsHTML                 String?                     @db.NVarChar(Max)
+  CorpsSMS                  String?                     @db.NVarChar(500)
+  VariablesDisponibles      String?                     @db.NVarChar(Max)
+  CanauxDisponibles         String?                     @db.NVarChar(Max)
+  Categorie                 String?                     @db.NVarChar(50)
+  Langue                    String?                     @default("fr", map: "DF__Templates__Langu__7B113988") @db.NVarChar(10)
+  DateCreation              DateTime?                   @default(dbgenerated("sysdatetime()"), map: "DF__Templates__DateC__7C055DC1")
+  DateModification          DateTime?
+  Actif                     Boolean?                    @default(true, map: "DF__Templates__Actif__7CF981FA")
+  DeclencheursNotifications DeclencheursNotifications[]
+
+  @@index([Actif], map: "IDX_Templates_Actif")
+  @@index([Categorie], map: "IDX_Templates_Categorie")
+  @@index([TypeNotification], map: "IDX_Templates_Type")
+}
+
+model ZonesGeographiques {
+  IdentifiantZone          Int                       @id(map: "PK__ZonesGeo__E3E661F171881F54") @default(autoincrement())
+  NomZone                  String                    @db.NVarChar(100)
+  TypeZone                 String?                   @db.NVarChar(50)
+  ParentZone               Int?
+  GeoJSON                  String?                   @db.NVarChar(Max)
+  Coordonnees              Unsupported("geography")?
+  CentroidLatitude         Decimal?                  @db.Decimal(10, 8)
+  CentroidLongitude        Decimal?                  @db.Decimal(11, 8)
+  RayonMetres              Int?
+  NombreVehicules          Int?                      @default(0, map: "DF__ZonesGeog__Nombr__636EBA21")
+  PrixMoyen                Decimal?                  @db.Decimal(10, 2)
+  Popularite               Int?                      @default(0, map: "DF__ZonesGeog__Popul__6462DE5A")
+  DateCreation             DateTime?                 @default(dbgenerated("sysdatetime()"), map: "DF__ZonesGeog__DateC__65570293")
+  DateMiseAJour            DateTime?
+  ZonesGeographiques       ZonesGeographiques?       @relation("ZonesGeographiquesToZonesGeographiques", fields: [ParentZone], references: [IdentifiantZone], onDelete: NoAction, onUpdate: NoAction, map: "FK_Zones_Parent")
+  other_ZonesGeographiques ZonesGeographiques[]      @relation("ZonesGeographiquesToZonesGeographiques")
+
+  @@index([CentroidLatitude, CentroidLongitude], map: "IDX_Zones_Geospatial")
+  @@index([Popularite(sort: Desc)], map: "IDX_Zones_Popularite")
+  @@index([TypeZone], map: "IDX_Zones_Type")
+}

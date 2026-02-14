@@ -1,0 +1,49 @@
+# FastAPI et dépendances
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+pydantic-settings==2.1.0
+
+# Base de données SQL Server
+sqlalchemy==2.0.25
+pyodbc==5.0.1
+starlette==0.35.1
+
+# Pydantic pour validation
+pydantic==2.5.2
+email-validator==2.1.0
+
+# Authentification
+pyjwt==2.8.0
+bcrypt==4.1.2
+python-multipart==0.0.6
+
+# Redis cache
+redis==4.6.0
+
+# HTTP client
+httpx==0.26.0
+
+# Payment gateways
+stripe==7.10.0
+
+# Email
+sendgrid==6.11.0
+
+# Monitoring & Logging
+sentry-sdk[fastapi]==1.39.2
+
+# Rate limiting
+slowapi==0.1.9
+
+# Tests
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0
+
+# Image processing
+Pillow==10.2.0
+
+# Utilitaires
+python-dotenv==1.0.0
+pytz==2023.3.post1

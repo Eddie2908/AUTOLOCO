@@ -1,0 +1,222 @@
+# ============================================================
+# ENVIRONNEMENT & SECRETS
+# ============================================================
+# ⚠️ CRITIQUE: Les fichiers .env contiennent des credentials
+# Jamais committer les clés API, mots de passe, tokens
+.env
+.env.*
+!.env.example
+.env.local
+.env.production.local
+
+# ============================================================
+# DÉPENDANCES & PACKAGES
+# ============================================================
+# Dépendances npm/pnpm - volume énorme, reconstrutable
+/node_modules
+/.pnpm/store/
+# Cache du gestionnaire de paquets
+node_modules/.cache/
+node_modules/.pnpm-store/
+
+# ============================================================
+# BUILD & ARTIFACTS
+# ============================================================
+# Répertoire de build Next.js - généré à la construction
+/.next/
+/out/
+/build/
+/dist/
+
+# Fichiers de build TypeScript - auto-générés
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================================
+# LOGS & DEBUGGING
+# ============================================================
+# Logs npm/yarn/pnpm - fichiers debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Logs divers
+*.log
+*.log.*
+logs/
+
+# ============================================================
+# CACHE - ÉDITEURS IDE & OUTILS
+# ============================================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# WebStorm / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# JetBrains IDE cache
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim & Neovim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+.vim/
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================================
+# SYSTÈME D'EXPLOITATION
+# ============================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*
+
+# ============================================================
+# DEPLOYMENT & HOSTING
+# ============================================================
+# Vercel
+.vercel
+.vercel/
+
+# Next.js telemetry
+.next/telemetry/
+
+# ============================================================
+# PRISMA
+# ============================================================
+# Base de données locale dev
+prisma/*.db
+prisma/*.db-journal
+
+# ============================================================
+# TESTING
+# ============================================================
+# Code coverage reports
+coverage/
+.nyc_output/
+.coverage
+*.lcov
+htmlcov/
+
+# Jest & testing
+.jest/
+.test-cache/
+
+# ============================================================
+# DIVERS
+# ============================================================
+# Fichiers temporaires
+*.tmp
+*.temp
+*.swp
+*.bak
+*.backup
+
+# Archives
+*.zip
+*.tar.gz
+*.tar
+*.rar
+*.7z
+
+# Fichiers générés
+.generated/
+dist/
+build/
+
+# Package lock files (garder pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+.vercel
+
+
+
+
+
+# ============================================================
+# .gitignore RACINE - AUTOLOCO PROJECT
+# ============================================================
+# Ce fichier s'applique au niveau racine du projet
+
+# ============================================================
+# ÉDITEURS IDE & OUTILS (niveau projet)
+# ============================================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# SYSTÈME D'EXPLOITATION
+# ============================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Trash-*
+
+# ============================================================
+# LOGS & DEBUGGING
+# ============================================================
+*.log
+*.log.*
+logs/
+
+# ============================================================
+# DOSSIERS SPÉCIFIQUES AU PROJET
+# ============================================================
+# Les sous-dossiers (frontend/ et backend/) ont leurs propres .gitignore
+# Mais on peut ajouter des patterns au niveau racine si nécessaire
+
+# Fichiers temporaires de test
+*.tmp
+*.temp
+
+# Archives
+*.zip
+*.tar.gz
+
+.vercel
+
+.vercel

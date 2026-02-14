@@ -1,0 +1,493 @@
+###
+# Collection de Tests API - AUTOLOCO Backend
+# ==========================================
+#
+# Pour utiliser ce fichier:
+# 1. Installer l'extension "REST Client" dans VS Code
+# 2. Cliquer sur "Send Request" au-dessus de chaque requête
+# 3. Remplacer {{token}} par votre token JWT réel après login
+#
+# Raccourci: Ctrl+Alt+R (Windows/Linux) ou Cmd+Alt+R (macOS)
+###
+
+# ============================================================
+# VARIABLES
+# ============================================================
+
+@baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.VOTRE_TOKEN_ICI
+
+# ============================================================
+# 1. AUTHENTIFICATION
+# ============================================================
+
+### 1.1 - Inscription d'un nouvel utilisateur
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "email": "test.user@autoloco.cm",
+    "password": "SecurePassword123!",
+    "nom": "Nguema",
+    "prenom": "Jean",
+    "telephone": "+237670123456",
+    "role": "Locataire"
+}
+
+### 1.2 - Connexion (Login)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "test.user@autoloco.cm",
+    "password": "SecurePassword123!"
+}
+
+### 1.3 - Récupérer le profil utilisateur actuel
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### 1.4 - Rafraîchir le token
+POST {{baseUrl}}/auth/refresh
+Authorization: Bearer {{token}}
+
+### 1.5 - Déconnexion
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+### 1.6 - Mot de passe oublié
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "test.user@autoloco.cm"
+}
+
+# ============================================================
+# 2. GESTION UTILISATEURS
+# ============================================================
+
+### 2.1 - Mettre à jour le profil
+PUT {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nom": "Nguema",
+    "prenom": "Jean-Paul",
+    "telephone": "+237670123456",
+    "bio": "Passionné de voyages et de découvertes"
+}
+
+### 2.2 - Changer le mot de passe
+PUT {{baseUrl}}/users/me/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "old_password": "SecurePassword123!",
+    "new_password": "NewSecurePassword456!"
+}
+
+### 2.3 - Obtenir un utilisateur par ID
+GET {{baseUrl}}/users/123
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 3. VÉHICULES
+# ============================================================
+
+### 3.1 - Rechercher des véhicules
+GET {{baseUrl}}/search?ville=Douala&prix_min=10000&prix_max=50000&transmission=Automatique&limit=20
+Authorization: Bearer {{token}}
+
+### 3.2 - Obtenir les détails d'un véhicule
+GET {{baseUrl}}/vehicles/1
+Authorization: Bearer {{token}}
+
+### 3.3 - Créer un nouveau véhicule (Propriétaire)
+POST {{baseUrl}}/vehicles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "marque": "Toyota",
+    "modele": "Corolla",
+    "annee": 2022,
+    "immatriculation": "CM-1234-DLA",
+    "nombre_places": 5,
+    "type_transmission": "Automatique",
+    "type_carburant": "Essence",
+    "kilometrage": 25000,
+    "couleur": "Blanc",
+    "prix_journalier": 25000,
+    "localisation_ville": "Douala",
+    "localisation_region": "Littoral",
+    "latitude": 4.0511,
+    "longitude": 9.7679,
+    "description": "Toyota Corolla 2022 en excellent état, climatisation, GPS intégré"
+}
+
+### 3.4 - Mettre à jour un véhicule
+PUT {{baseUrl}}/vehicles/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "prix_journalier": 27000,
+    "description": "Prix mis à jour - Toyota Corolla 2022, excellent état"
+}
+
+### 3.5 - Supprimer un véhicule
+DELETE {{baseUrl}}/vehicles/1
+Authorization: Bearer {{token}}
+
+### 3.6 - Obtenir les véhicules d'un propriétaire
+GET {{baseUrl}}/users/123/vehicles
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 4. GÉOLOCALISATION (GPS)
+# ============================================================
+
+### 4.1 - Rechercher véhicules à proximité
+GET {{baseUrl}}/gps/nearby?lat=4.0511&lng=9.7679&radius=10&category=2&min_price=15000&max_price=50000&limit=20
+Authorization: Bearer {{token}}
+
+### 4.2 - Obtenir les villes disponibles
+GET {{baseUrl}}/gps/cities?min_vehicles=5
+
+### 4.3 - Calculer un itinéraire
+GET {{baseUrl}}/gps/directions?origin_lat=4.0511&origin_lng=9.7679&dest_lat=3.8480&dest_lng=11.5021&provider=osrm
+
+### 4.4 - Géocoder une adresse
+POST {{baseUrl}}/gps/geocode
+Content-Type: application/json
+
+{
+    "address": "Boulevard de la Liberté",
+    "city": "Douala",
+    "country": "Cameroun"
+}
+
+### 4.5 - Reverse géocodage (coordonnées → adresse)
+GET {{baseUrl}}/gps/reverse-geocode?lat=4.0511&lng=9.7679
+
+### 4.6 - Calculer distance entre 2 points
+GET {{baseUrl}}/gps/distance?lat1=4.0511&lng1=9.7679&lat2=3.8480&lng2=11.5021
+
+# ============================================================
+# 5. RÉSERVATIONS (BOOKINGS)
+# ============================================================
+
+### 5.1 - Créer une réservation
+POST {{baseUrl}}/bookings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "identifiant_vehicule": 1,
+    "date_debut": "2026-02-01T10:00:00",
+    "date_fin": "2026-02-05T18:00:00",
+    "lieu_prise_en_charge": "Aéroport International de Douala",
+    "lieu_retour": "Hôtel Akwa Palace, Douala",
+    "besoin_livraison": true,
+    "adresse_livraison": "Akwa, Douala",
+    "besoin_chauffeur": false
+}
+
+### 5.2 - Obtenir les réservations de l'utilisateur
+GET {{baseUrl}}/bookings/my-bookings?status=en_cours&limit=10
+Authorization: Bearer {{token}}
+
+### 5.3 - Obtenir les détails d'une réservation
+GET {{baseUrl}}/bookings/1
+Authorization: Bearer {{token}}
+
+### 5.4 - Annuler une réservation
+POST {{baseUrl}}/bookings/1/cancel
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "raison": "Changement de plans de voyage"
+}
+
+### 5.5 - Confirmer le début d'une location (Propriétaire)
+POST {{baseUrl}}/bookings/1/start
+Authorization: Bearer {{token}}
+
+### 5.6 - Confirmer la fin d'une location (Propriétaire)
+POST {{baseUrl}}/bookings/1/complete
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "kilometrage_final": 28500,
+    "etat_vehicule": "Excellent",
+    "commentaire": "Retour impeccable, locataire très soigneux"
+}
+
+# ============================================================
+# 6. PAIEMENTS
+# ============================================================
+
+### 6.1 - Créer un paiement
+POST {{baseUrl}}/payments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "identifiant_reservation": 1,
+    "montant": 125000,
+    "methode_paiement": "Mobile Money",
+    "numero_telephone": "+237670123456"
+}
+
+### 6.2 - Vérifier le statut d'un paiement
+GET {{baseUrl}}/payments/1
+Authorization: Bearer {{token}}
+
+### 6.3 - Obtenir l'historique des paiements
+GET {{baseUrl}}/payments/history?limit=20
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 7. AVIS ET NOTES (REVIEWS)
+# ============================================================
+
+### 7.1 - Créer un avis sur un véhicule
+POST {{baseUrl}}/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "identifiant_vehicule": 1,
+    "identifiant_reservation": 1,
+    "note_generale": 5,
+    "note_proprete": 5,
+    "note_confort": 4,
+    "note_performance": 5,
+    "note_rapport_qualite_prix": 5,
+    "commentaire": "Excellent véhicule, très bien entretenu. Le propriétaire est très professionnel. Je recommande vivement!",
+    "recommande": true
+}
+
+### 7.2 - Obtenir les avis d'un véhicule
+GET {{baseUrl}}/vehicles/1/reviews?limit=10&sort=recent
+
+### 7.3 - Répondre à un avis (Propriétaire)
+POST {{baseUrl}}/reviews/1/reply
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "reponse": "Merci beaucoup pour votre excellent retour! Ce fut un plaisir de vous louer mon véhicule."
+}
+
+# ============================================================
+# 8. MESSAGES
+# ============================================================
+
+### 8.1 - Envoyer un message
+POST {{baseUrl}}/messages
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "identifiant_destinataire": 2,
+    "identifiant_reservation": 1,
+    "contenu": "Bonjour, je souhaite confirmer l'heure de prise en charge du véhicule."
+}
+
+### 8.2 - Obtenir les conversations
+GET {{baseUrl}}/messages/conversations?limit=20
+Authorization: Bearer {{token}}
+
+### 8.3 - Obtenir les messages d'une conversation
+GET {{baseUrl}}/messages/conversation/2?limit=50
+Authorization: Bearer {{token}}
+
+### 8.4 - Marquer les messages comme lus
+PUT {{baseUrl}}/messages/conversation/2/mark-read
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 9. NOTIFICATIONS
+# ============================================================
+
+### 9.1 - Obtenir toutes les notifications
+GET {{baseUrl}}/notifications?limit=20&unread_only=true
+Authorization: Bearer {{token}}
+
+### 9.2 - Marquer une notification comme lue
+PUT {{baseUrl}}/notifications/1/read
+Authorization: Bearer {{token}}
+
+### 9.3 - Marquer toutes les notifications comme lues
+PUT {{baseUrl}}/notifications/mark-all-read
+Authorization: Bearer {{token}}
+
+### 9.4 - Supprimer une notification
+DELETE {{baseUrl}}/notifications/1
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 10. FAVORIS
+# ============================================================
+
+### 10.1 - Ajouter un véhicule aux favoris
+POST {{baseUrl}}/favorites
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "identifiant_vehicule": 1
+}
+
+### 10.2 - Obtenir les favoris de l'utilisateur
+GET {{baseUrl}}/favorites?limit=20
+Authorization: Bearer {{token}}
+
+### 10.3 - Retirer un véhicule des favoris
+DELETE {{baseUrl}}/favorites/1
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 11. UPLOAD DE FICHIERS
+# ============================================================
+
+### 11.1 - Upload avatar utilisateur
+POST {{baseUrl}}/users/avatar
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< ./test_files/avatar.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 11.2 - Upload photo de véhicule
+POST {{baseUrl}}/vehicles/1/images
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="vehicle.jpg"
+Content-Type: image/jpeg
+
+< ./test_files/vehicle.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="est_principale"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="ordre_affichage"
+
+0
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Photo principale du véhicule
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="add_watermark"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="convert_webp"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 11.3 - Upload document KYC
+POST {{baseUrl}}/documents/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type_document"
+
+carte_identite
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="id_card.jpg"
+Content-Type: image/jpeg
+
+< ./test_files/id_card.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+# ============================================================
+# 12. ANALYTICS (ADMIN)
+# ============================================================
+
+### 12.1 - Obtenir les statistiques globales
+GET {{baseUrl}}/analytics/stats
+Authorization: Bearer {{token}}
+
+### 12.2 - Obtenir les revenus par période
+GET {{baseUrl}}/analytics/revenue?start_date=2026-01-01&end_date=2026-01-31
+Authorization: Bearer {{token}}
+
+### 12.3 - Obtenir les utilisateurs actifs
+GET {{baseUrl}}/analytics/active-users?period=30days
+Authorization: Bearer {{token}}
+
+# ============================================================
+# 13. ADMINISTRATION
+# ============================================================
+
+### 13.1 - Liste des utilisateurs (Admin)
+GET {{baseUrl}}/admin/users?page=1&limit=50&role=Locataire&status=Actif
+Authorization: Bearer {{token}}
+
+### 13.2 - Suspendre un utilisateur
+PUT {{baseUrl}}/admin/users/123/suspend
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "raison": "Violation des conditions d'utilisation",
+    "duree_jours": 30
+}
+
+### 13.3 - Vérifier un document KYC
+PUT {{baseUrl}}/admin/documents/1/verify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "statut": "approuve",
+    "commentaire": "Document valide et lisible"
+}
+
+### 13.4 - Modérer un avis
+PUT {{baseUrl}}/admin/reviews/1/moderate
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "action": "hide",
+    "raison": "Contenu inapproprié"
+}
+
+# ============================================================
+# 14. HEALTH CHECK & INFO
+# ============================================================
+
+### 14.1 - Health check
+GET http://localhost:8000/health
+
+### 14.2 - Version de l'API
+GET http://localhost:8000/version
+
+### 14.3 - Documentation Swagger
+GET http://localhost:8000/docs
+
+### 14.4 - Documentation ReDoc
+GET http://localhost:8000/redoc
+
+# ============================================================
+# FIN DES TESTS
+# ============================================================

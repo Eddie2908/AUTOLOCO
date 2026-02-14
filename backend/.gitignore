@@ -1,0 +1,160 @@
+# ============================================================
+# ENVIRONNEMENT & SECRETS
+# ============================================================
+# ⚠️ CRITIQUE: Les fichiers .env contiennent des credentials
+# Jamais committer les clés API, mots de passe, tokens DB
+.env
+.env.*
+!.env.example
+.env.local
+.env.production.local
+
+# ============================================================
+# ENVIRONNEMENT VIRTUEL PYTHON
+# ============================================================
+# Virtual environment - dépendances reconstrbuibles via requirements.txt
+/venv/
+/env/
+/.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ============================================================
+# CACHE PYTHON
+# ============================================================
+# Bytecode compilé
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution files
+*.egg-info/
+*.eggs/
+dist/
+build/
+
+# Pytest cache
+.pytest_cache/
+.cache/
+.hypothesis/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+*.cover
+coverage.xml
+
+# ============================================================
+# DÉPENDANCES & PACKAGES
+# ============================================================
+# pip lock files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Poetry
+poetry.lock
+pyproject.lock
+
+# Pipenv
+Pipfile.lock
+
+# ============================================================
+# LOGS & DEBUGGING
+# ============================================================
+# Logs divers
+*.log
+*.log.*
+logs/
+
+# ============================================================
+# CACHE - ÉDITEURS IDE & OUTILS
+# ============================================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim & Neovim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+.vim/
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# IPython
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================================================
+# SYSTÈME D'EXPLOITATION
+# ============================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*
+
+# ============================================================
+# DATABASE
+# ============================================================
+# Base de données locale SQLite (si utilisée)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ============================================================
+# DIVERS
+# ============================================================
+# Fichiers temporaires
+*.tmp
+*.temp
+*.swp
+*.bak
+*.backup
+
+# Archives
+*.zip
+*.tar.gz
+*.tar
+*.rar
+*.7z
+
+# Secrets & tokens
+.auth/
+secrets/
+
+# Node.js (legacy - ne devrait pas être ici)
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log
