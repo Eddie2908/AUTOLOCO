@@ -3,7 +3,7 @@ Data Integrity Service
 ======================
 
 Service responsable de vérifier l'intégrité et la cohérence des données
-récupérées de la base de données SQL Server par utilisateur.
+récupérées de la base de données PostgreSQL par utilisateur.
 
 Fonctionnalités:
 - Validation des données utilisateur

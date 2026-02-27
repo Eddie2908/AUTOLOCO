@@ -29,7 +29,7 @@ class ZoneGeographique(Base):
     
     # Géométrie optimisée
     GeoJSON = Column(Text)  # JSON representation
-    # Coordonnees = Column(GEOGRAPHY)  # Type spécial SQL Server
+    # Coordonnees = Column(Geography)  # PostGIS type if needed
     CentroidLatitude = Column(DECIMAL(10, 8))
     CentroidLongitude = Column(DECIMAL(11, 8))
     RayonMetres = Column(Integer)

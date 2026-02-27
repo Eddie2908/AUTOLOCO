@@ -33,8 +33,8 @@ class AdresseUtilisateur(Base):
     CodePostal = Column(String(20))
     Pays = Column(String(100), nullable=False, default='Sénégal')
     
-    # Géolocalisation avec GEOGRAPHY (géré par SQL Server)
-    # Coordonnees = Column(GEOGRAPHY) # Type spécial SQL Server
+    # Géolocalisation
+    # Coordonnees = Column(Geography) # PostGIS type if needed
     Latitude = Column(DECIMAL(10, 8))
     Longitude = Column(DECIMAL(11, 8))
     

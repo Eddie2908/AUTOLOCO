@@ -185,9 +185,9 @@ class AnalyticsService:
             )
         ).scalar()
         
-        # Durée moyenne de location (SQL Server DATEDIFF syntax)
+        # Durée moyenne de location (PostgreSQL syntax)
         avg_duration = self.db.query(
-            func.avg(func.datediff(text("day"), Reservation.DateDebut, Reservation.DateFin))
+            func.avg(func.extract(text("day"), Reservation.DateFin - Reservation.DateDebut))
         ).filter(
             and_(
                 Reservation.DateCreationReservation >= start_date,
@@ -283,9 +283,9 @@ class AnalyticsService:
     def _get_growth_metrics(self, start_date: datetime, end_date: datetime) -> Dict[str, Any]:
         """Métriques de croissance"""
         
-        # SQL Server: truncate to week start using DATEADD(week, DATEDIFF(week, 0, col), 0)
+        # PostgreSQL: truncate to week start using DATE_TRUNC
         def week_trunc(col):
-            return func.dateadd(text("week"), func.datediff(text("week"), 0, col), 0)
+            return func.date_trunc(text("'week'"), col)
         
         week_label = "week_start"
         

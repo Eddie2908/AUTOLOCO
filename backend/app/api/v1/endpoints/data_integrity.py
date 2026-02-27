@@ -3,7 +3,7 @@ Data Integrity API Endpoints
 =============================
 
 Endpoints pour vérifier l'intégrité et la cohérence des données
-stockées dans la base de données SQL Server.
+stockées dans la base de données PostgreSQL.
 
 Routes:
 - GET /api/v1/admin/integrity/users/{user_id} - Vérifier un utilisateur spécifique

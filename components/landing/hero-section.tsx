@@ -161,7 +161,7 @@ export function HeroSection() {
             <div className="relative h-full">
               {/* Main Image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/50 h-full">
-                <img src="/modern-car-rental-platform-dashboard-with-vehicles.jpg" alt="AUTOLOCO Platform" className="w-full h-full object-cover" />
+                <img src="/modern-car-rental-platform-dashboard-with-vehicles.svg" alt="AUTOLOCO Platform" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
               </div>
 

@@ -31,7 +31,7 @@ class Incident(Base):
     # Date et lieu
     DateIncident = Column(DateTime, nullable=False)
     LieuIncident = Column(String(500))
-    # CoordonneesIncident = geography type géré par SQL Server
+    # CoordonneesIncident = geography type (PostGIS if needed)
     
     # Photos et rapports
     PhotosIncident = Column(Text)  # JSON array

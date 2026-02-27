@@ -42,10 +42,10 @@ class Settings(BaseSettings):
     ]
     
     # ============================================================
-    # BASE DE DONNÉES SQL SERVER
+    # BASE DE DONNÉES POSTGRESQL
     # ============================================================
-    DATABASE_URL: str = "mssql+pyodbc://sa:Password123@localhost/AUTOLOCO?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
-    # Format: mssql+pyodbc://user:pass@server/database?driver=ODBC+Driver+18+for+SQL+Server
+    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/autoloco"
+    # Format: postgresql://user:password@host:port/database
     
     DB_POOL_SIZE: int = 20
     DB_MAX_OVERFLOW: int = 10
@@ -203,7 +203,7 @@ class Settings(BaseSettings):
                     "FATAL: SECRET_KEY must be changed from default in production! "
                     "Set a strong random key via the SECRET_KEY environment variable."
                 )
-            if self.DATABASE_URL.startswith("mssql+pyodbc://sa:Password123"):
+            if self.DATABASE_URL.startswith("postgresql://postgres:postgres@localhost"):
                 raise ValueError(
                     "FATAL: DATABASE_URL still uses default dev credentials in production!"
                 )

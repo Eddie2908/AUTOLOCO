@@ -154,22 +154,22 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} AUTOLOCO. Tous droits réservés.</p>
           <div className="flex items-center gap-4">
             <img
-              src="/mtn-mobile-money-logo.png"
+              src="/mtn-mobile-money-logo.svg"
               alt="MTN Mobile Money"
               className="h-8 opacity-60 hover:opacity-100 transition-opacity"
             />
             <img
-              src="/orange-money-logo.jpg"
+              src="/orange-money-logo.svg"
               alt="Orange Money"
               className="h-8 opacity-60 hover:opacity-100 transition-opacity"
             />
             <img
-              src="/visa-card-logo.jpg"
+              src="/visa-card-logo.svg"
               alt="Visa"
               className="h-8 opacity-60 hover:opacity-100 transition-opacity"
             />
             <img
-              src="/mastercard-logo.png"
+              src="/mastercard-logo.svg"
               alt="Mastercard"
               className="h-8 opacity-60 hover:opacity-100 transition-opacity"
             />

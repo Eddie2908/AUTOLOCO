@@ -1,8 +1,8 @@
 """
-Configuration de la base de données SQL Server
-===============================================
+Configuration de la base de données PostgreSQL
+================================================
 
-Setup de SQLAlchemy avec support asynchrone pour SQL Server.
+Setup de SQLAlchemy avec support asynchrone pour PostgreSQL.
 """
 
 from sqlalchemy.orm import declarative_base
@@ -13,14 +13,14 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-# NOTE: For Windows compatibility we use `pyodbc` (sync driver) and a small async wrapper that runs DB calls in a threadpool.
+# NOTE: We use a sync driver (psycopg2) and a small async wrapper that runs DB calls in a threadpool.
 # This preserves the async interface used across services (await db.execute(...), await session.commit(), etc.)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from starlette.concurrency import run_in_threadpool
 
-# Create a synchronous engine using pyodbc
+# Create a synchronous engine using psycopg2
 engine = create_engine(
     settings.DATABASE_URL,
     echo=settings.DB_ECHO,

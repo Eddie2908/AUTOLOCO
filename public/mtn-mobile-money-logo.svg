@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 120 40">
+  <rect width="120" height="40" rx="6" fill="#ffcc00"/>
+  <text x="60" y="16" font-family="sans-serif" font-size="9" font-weight="bold" fill="#003366" text-anchor="middle">MTN</text>
+  <text x="60" y="28" font-family="sans-serif" font-size="7" fill="#003366" text-anchor="middle">Mobile Money</text>
+</svg>

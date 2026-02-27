@@ -126,7 +126,7 @@ export default function RegisterPage() {
           )}
         >
           <img
-            src="/modern-car-rental-signup-illustration.jpg"
+            src="/modern-car-rental-signup-illustration.svg"
             alt="Inscription AUTOLOCO"
             className="w-full h-auto rounded-3xl shadow-2xl mb-8 border border-border/50"
           />
